@@ -9,6 +9,7 @@ int main(void)
 	double *matrix1 = NULL, *matrix2 = NULL, *matrix_result = NULL;
 	double *row_factor = NULL, *col_factor = NULL;
 	thrd_t *threads = NULL;
+	function_resourse_t *fr = NULL;
 	
 	//1)Create matrix1
 	write_size_of_matr(&row1, &col1);
@@ -28,9 +29,10 @@ int main(void)
 	write_count_of_threads(&threads_count);
 	matrix_result = calloc(row1 * col2, sizeof(double));
 	threads = malloc(sizeof(thrd_t) * threads_count);
+	fr = calloc(sizeof(function_resourse_t) * threads_count);
 
 	//3)Get result, using standard method multiplying
-	standard_multiply_matrix(matrix1, matrix2, row1, col1, row2, col2, threads, threads_count, matrix_result);
+	standard_multiply_matrix(matrix1, matrix2, row1, col1, row2, col2, threads, threads_count, fr, matrix_result);
 	print_matr(stdout, matrix_result, row1, col2);
 	putchar('\n');
 	for (int i = 0; i < row1 * col2; i++)
@@ -40,7 +42,7 @@ int main(void)
 	col_factor = calloc(col2, sizeof(double));
 
 	//4)Get result, using vinograd method multiplying
-	vinograd_multiply_matrix(matrix1, matrix2, row_factor, col_factor, row1, col1, row2, col2, threads, threads_count, matrix_result);
+	vinograd_multiply_matrix(matrix1, matrix2, row_factor, col_factor, row1, col1, row2, col2, matrix_result);
 	print_matr(stdout, matrix_result, row1, col2);
 	putchar('\n');
 	

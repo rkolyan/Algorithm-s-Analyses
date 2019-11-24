@@ -5,26 +5,27 @@
 static int partly_standard_multiply_matrix(void *args)
 {
 	function_resourse_t *fr = (function_resourse_t *)args;
-
-	int j = fr->begin_position % col_count1;
-	int supj = fr->end_position - fr->begin_position;
+	int j = fr->begin_position % fr->col_count2;
+	int supj = fr->end_position - fr->begin_position + j;
 	double sum = 0;
-	for (int i = fr->begin_position / col_count1, supi = fr->end_position / col_count1; i < supi; i++)
+	for (int i = fr->begin_position / fr->col_count2, supi = fr->end_position / fr->col_count2 + 1; i < supi; i++)
 	{
-		for (; j < col_count1 && j < supj; j++)
+		for (; j < fr->col_count2 && j < supj; j++)
 		{
 			sum = 0;
-			for (int k = 0; k < col_count1; k++)
-				sum += (fr->matrix1)[i * col_count1 + k] * (fr->matrix2)[k * col_count2 + j];
+			for (int k = 0; k < fr->col_count1; k++)
+				sum += (fr->matrix1)[i * fr->col_count1 + k] * (fr->matrix2)[k * fr->col_count2 + j];
+			(fr->matrix_result)[i * fr->col_count2 + j] = sum;
 		}
-		supj -= col_count1;
+		supj -= fr->col_count2;
+		j = 0;
 	}
 	return SUCCESS;
 }
 
 error_t standard_multiply_matrix(double *matrix1, double *matrix2, 
 		int row_count1, int col_count1, int row_count2, int col_count2, 
-		thrd_t *threads, function_resourse_t *fr, int threads_count, double *matrix_result)
+		thrd_t *threads, int threads_count, function_resourse_t *fr, double *matrix_result)
 {
 	if (!matrix1 || !matrix2 || !matrix_result || row_count1 <= 0 || col_count1 <= 0 || row_count2 <= 0 || \
 		       	col_count2 <= 0 || col_count1 != row_count2 || !threads || threads_count <= 0 || !fr)
@@ -32,6 +33,7 @@ error_t standard_multiply_matrix(double *matrix1, double *matrix2,
 	int tmp1 = row_count1 * col_count2;
 	int tmp2 = tmp1 / threads_count;
 	int position = 0;
+	error_t error_code = SUCCESS;
 	tmp1 = tmp1 % threads_count;
 	for (int i = 0; i < threads_count; i++)
 	{
@@ -49,10 +51,10 @@ error_t standard_multiply_matrix(double *matrix1, double *matrix2,
 		(fr + i)->row_count = row_count1;
 		(fr + i)->col_count1 = col_count1;
 		(fr + i)->col_count2 = col_count2;
-		thrd_create(threads + i, multiply_row_on_col, fr + i);
-		thrd_join(threads[i], NULL);
+		thrd_create(threads + i, partly_standard_multiply_matrix, fr + i);
+		thrd_join(threads[i], &error_code);
 	}
-	return SUCCESS;
+	return error_code;
 }
 
 error_t vinograd_multiply_matrix(double *matrix1, double *matrix2, double *row_factor, double *col_factor,

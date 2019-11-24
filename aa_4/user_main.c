@@ -29,7 +29,7 @@ int main(void)
 	write_count_of_threads(&threads_count);
 	matrix_result = calloc(row1 * col2, sizeof(double));
 	threads = malloc(sizeof(thrd_t) * threads_count);
-	fr = calloc(sizeof(function_resourse_t) * threads_count);
+	fr = malloc(sizeof(function_resourse_t) * threads_count);
 
 	//3)Get result, using standard method multiplying
 	standard_multiply_matrix(matrix1, matrix2, row1, col1, row2, col2, threads, threads_count, fr, matrix_result);
@@ -53,5 +53,6 @@ int main(void)
 	free(row_factor);
 	free(col_factor);
 	free(threads);
+	free(fr);
 	return 0;
 }

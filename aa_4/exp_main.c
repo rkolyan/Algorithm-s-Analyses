@@ -24,9 +24,9 @@ int main(void)
 	find_calculations(count1, count2, threads_count, functions, "calculations/standard_multiply.txt");
 	puts("1 is ready");
 	functions->id = 1;
-	functions->vinograd_function = vinograd_multiply_matrix;
-	find_calculations(count1, count2, threads_count, functions, "calculations/vinograd_multiply.txt");
-	puts("2 is ready");
+	//functions->vinograd_function = vinograd_multiply_matrix;
+	//find_calculations(count1, count2, threads_count, functions, "calculations/vinograd_multiply.txt");
+	//puts("2 is ready");
 	free(functions);
 	return 0;
 }

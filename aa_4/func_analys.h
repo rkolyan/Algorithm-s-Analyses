@@ -6,7 +6,7 @@
 #include "func_forms.h"
 
 void find_calculations(int count1, int count2, int threads_count, function_t *functions, const char *filename);
-clock_t find_time(double *matrix1, double *matrix2, double *matrix_result, int row1, int row2, int col2, thrd_t *threads, int threads_count, function_t *functions);
+clock_t find_time(double *matrix1, double *matrix2, double *matrix_result, int row1, int row2, int col2, thrd_t *threads, int threads_count, function_resourse_t *fr, function_t *functions);
 error_t fill_random_matrix_with_size(int row, int col, double *matrix);
 
 #endif

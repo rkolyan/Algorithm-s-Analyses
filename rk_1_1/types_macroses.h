@@ -5,7 +5,8 @@ typedef unsigned char type_t;
 
 typedef struct stack_element
 {
-	int data;
+	int vartice_count;
+	int *clique;
 	struct stack_element *next;
 } stack_element_t;
 
@@ -13,7 +14,7 @@ typedef struct vertice
 {
 	int num;
 	int kol_of_vert;
-	struct vertice1 **array;
+	int *numbers_array;
 } vertice_t;
 
 /*

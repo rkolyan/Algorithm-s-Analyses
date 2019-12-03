@@ -1,23 +1,5 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include "funcs.h"
-
-error_t create_array_from_file(FILE *file, type_t **array, int *count)
-{
-	if (!array || !file || !count)
-		return ERROR_INPUT;
-
-	if (!fscanf(f, "%d", count));
-		return ERROR_INCORRECT;
-	int kol = (*count) * (*count);
-	*array = malloc(sizeof(type_t) * kol);
-	for (int i = 0; i < kol; i++)
-	{
-		if (!fscanf(f, "%hhu", *array + i))
-			return ERROR_INCORRECT;
-	}
-	return SUCCESS;
-}
+#include "vertices.h"
 
 error_t create_array_of_vertices(type_t *array, int count, vertice_t **varray)
 {
@@ -73,55 +55,6 @@ error_t create_file(vertice_t *varray, int count)
 
 	return SUCCESS;
 }
-
-error_t add_clique_to_stack(stack_element_t **head, int count, int *clique)
-{
-	if (!head)
-		return ERROR_INPUT;
-	
-	stack_element_t *tmp = NULL;
-
-	tmp = malloc(sizeof(stack_element_t));
-	if (!tmp)
-		return ERROR_ALLOCATE;
-	tmp->clique_size = count;
-	tmp->clique = clique;
-	tmp->next = *head;
-	*head = tmp;
-	return SUCCESS;
-}
-
-error_t remove_stack(stack_element_t **head)
-{
-	if (!head)
-		return ERROR_INPUT;
-
-	stack_element_t *tmp;
-
-	while (*head != NULL)
-	{
-		tmp = *head;
-		*head = (*head)->next;
-		free(tmp->clique);
-		free(tmp);
-	}
-	return SUCCESS;
-}
-
-/*
-error_t fill_stack(vertice_t *vertice, stack_element_t **head)
-{
-	if (!vertice || !head)
-		return ERROR_INPUT;
-	else if (is_num_in_stack(*head, vertice->num))
-		return SUCCESS;
-	else
-		add_element_to_stack(head, vertice->num);
-	for (int i = 0; i < vertice->vertice_count; i++)
-		fill_stack((vertice->array)[i], head);
-	return SUCCESS;
-}
-*/
 
 error_t remove_array_of_vertices(vertice_t **varray, int *count)
 {

@@ -18,7 +18,7 @@ static boolean is_vertice_is_part_of_clique(vertice_t *varray, int num, number_s
 		{
 			if ((varray + head->num)->array[i] == num)
 			{
-				flag = FALSE;
+				flag = TRUE;
 				break;
 			}
 		}
@@ -105,19 +105,19 @@ error_t print_cliques(vertice_t *varray, int count, clique_stack_element_t *head
 	}
 	puts("Cliques:");
 	for (int i = 0; i < count; i++)
-		printf("%d\n", i);
+		printf("%d\n", i + 1);
 	for (int i = 0; i < count; i++)
 	{
 		for (int j = 0; j < (varray + i)->vertice_count; j++)
 		{
 			if ((varray + i)->array[j] > i)
-				printf("%d %d\n", i, (varray + i)->array[j]);
+				printf("%d %d\n", i + 1, (varray + i)->array[j] + 1);
 		}
 	}
 	for (clique_stack_element_t *tmp = head; tmp; tmp = tmp->next)
 	{
 		for (int i = 0; i < tmp->clique_size; i++)
-			printf("%d ", tmp->clique[i]);
+			printf("%d ", tmp->clique[i] + 1);
 		puts("");
 	}
 	return SUCCESS;

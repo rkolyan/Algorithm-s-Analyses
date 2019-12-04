@@ -45,11 +45,11 @@ error_t create_output_graph_file(vertice_t *varray, int count)
 		return ERROR_INPUT;
 
 	FILE *file = fopen("res.dot", "w");
-	fprintf(file, "digraph res\n{\n");
+	fprintf(file, "graph res\n{\n");
 	for (int i = 0; i < count; i++)
 	{
 		for (int j = 0; j < (varray + i)->vertice_count; j++)
-			fprintf(file, "\t%d -> %d;\n", i, (varray + i)->array[j]);
+			fprintf(file, "\t%d -- %d;\n", i + 1, (varray + i)->array[j] + 1);
 	}
 	fprintf(file, "}\n");
 	fclose(file);

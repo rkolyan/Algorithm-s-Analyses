@@ -1,7 +1,10 @@
-CC = gcc -std=c99 -Wall -Werror -pedantic -ggdb
+CC = gcc -std=c1x -Wall -Werror -pedantic -ggdb
 
-app1.exe: main1.c
-	$(CC) -o app1.exe main1.c
+app.exe: main.o clique.o clique_stack.o number_stack.o matrix.o vertices.o
+	$(CC) -o $@ $^
+
+%.o: %.c
+	$(CC) -c $^
 
 clean:
-	rm *.exe res.*
+	rm *.o *.exe res.*

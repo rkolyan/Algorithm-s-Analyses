@@ -1,15 +1,49 @@
+#include "boolean.h"
+#include "clique_stack.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "clique_stack.h"
 
-error_t add_clique_to_stack(stack_element_t **head, int count, int *clique)
+//TODO: Change it
+boolean is_clique_in_stack(clique_stack_element_t *head, type_t *clique, int clique_size)
+{
+	boolean flag1 = FALSE, flag2 = FALSE;
+	for (; head != NULL; head = head->next)
+	{
+		flag1 = FALSE;
+		if (head->clique_size != clique_size)
+			continue;
+		flag1 = TRUE;
+		for (int i = 0; i < clique_size; i++)
+		{
+			flag2 = FALSE;
+			for (int j = 0; j < head->clique_size; j++)
+			{
+				if (clique[i] == head->clique[j])
+				{
+					flag2 = TRUE;
+					break;
+				}
+			}
+			if (!flag2)
+			{
+				flag1 = FALSE;
+				break;
+			}
+		}
+		if (flag1)
+			break;
+	}
+	return flag1;
+}
+
+error_t add_clique_to_clique_stack(clique_stack_element_t **head, int count, type_t *clique)
 {
 	if (!head)
 		return ERROR_INPUT;
 	
-	stack_element_t *tmp = NULL;
+	clique_stack_element_t *tmp = NULL;
 
-	tmp = malloc(sizeof(stack_element_t));
+	tmp = malloc(sizeof(clique_stack_element_t));
 	if (!tmp)
 		return ERROR_ALLOCATE;
 	tmp->clique_size = count;
@@ -19,12 +53,12 @@ error_t add_clique_to_stack(stack_element_t **head, int count, int *clique)
 	return SUCCESS;
 }
 
-error_t remove_stack(stack_element_t **head)
+error_t remove_clique_stack(clique_stack_element_t **head)
 {
 	if (!head)
 		return ERROR_INPUT;
 
-	stack_element_t *tmp;
+	clique_stack_element_t *tmp;
 
 	while (*head != NULL)
 	{
@@ -36,15 +70,12 @@ error_t remove_stack(stack_element_t **head)
 	return SUCCESS;
 }
 
-error_t fill_stack(vertice_t *vertice, stack_element_t **head)
+//TODO: make it print_cliques
+error_t print_not_connected(clique_stack_element_t **head, int count)
 {
-	if (!vertice || !head)
+	if (!head || !count)
 		return ERROR_INPUT;
-	else if (is_num_in_stack(*head, vertice->num))
-		return SUCCESS;
-	else
-		add_element_to_stack(head, vertice->num);
-	for (int i = 0; i < vertice->vertice_count; i++)
-		fill_stack((vertice->array)[i], head);
+
+	putchar('\n');
 	return SUCCESS;
 }

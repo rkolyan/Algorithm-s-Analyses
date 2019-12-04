@@ -1,36 +1,33 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
 #include <unistd.h>
-#include "types_macroses.h"
+#include "matrix.h"
+#include "vertices.h"
+#include "clique.h"
 
 int main(int argc, char **argv)
 {
-	type_t *array = NULL;
+	type_t *matrix = NULL;
 	FILE *f;
-	int kol = 0;
-	vertice_t1 **varray = NULL;
-	stack_element_t *head = NULL;
+	int count = 0;
+	vertice_t *varray = NULL;
+	clique_stack_element_t *clique_stack = NULL;
 
 	if (argc != 2)
-		return ERROR;
+		return ERROR_INPUT;
 	f = fopen(argv[1], "r");
-	kol = create_array_from_file(f, &array);
+	if (!f)
+		return ERROR_INCORRECT;
+	create_matrix_from_file(f, &matrix, &count);
 	fclose(f);
-	varray = create_array_of_vertices(array, kol);
-	free(array);
-	create_file(varray, kol);
-	for (int i = 1; i <= kol; i++)
-	{
-		fill_stack(varray[i - 1], &head);
-		print_not_connected(&head, kol, i);
-		remove_stack(&head);
-	}
-	destroy_graph(varray, kol);
+	create_vertices(matrix, count, &varray);
+	find_cliques(varray, count, &clique_stack);
+	print_cliques(varray, count, clique_stack);
+	remove_clique_stack(&clique_stack);
+	free(matrix);
+	create_output_graph_file(varray, count);
+	remove_vertices(&varray, &count);
 	system("dot -Tpng:gd res.dot > res.png");
-	
-	pid_t childpid = fork();
-	if (childpid == 0)
-		execl("/usr/bin/gthumb", "gthumb", "res.png");
+	system("gthumb res.png");
 	return SUCCESS;
 }

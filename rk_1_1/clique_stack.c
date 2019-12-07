@@ -108,6 +108,7 @@ error_t remove_duplicates_from_stack(clique_stack_element_t **head)
 					free(tmp2->clique);
 					free(tmp2);
 					tmp2 = previous;
+					continue;
 				}
 			}
 			else
@@ -118,6 +119,7 @@ error_t remove_duplicates_from_stack(clique_stack_element_t **head)
 					free(tmp2->clique);
 					free(tmp2);
 					tmp2 = previous;
+					continue;
 				}
 			}
 			previous = previous->next;

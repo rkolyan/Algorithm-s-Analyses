@@ -70,12 +70,58 @@ error_t remove_clique_stack(clique_stack_element_t **head)
 	return SUCCESS;
 }
 
-//TODO: make it print_cliques
-error_t print_not_connected(clique_stack_element_t **head, int count)
+static boolean are_cliques_equalient(type_t *clique1, int count1, type_t *clique2, int count2)
 {
-	if (!head || !count)
-		return ERROR_INPUT;
+	boolean flag = FALSE;
+	for (int i = 0; i < count1; i++)
+	{
+		flag = FALSE;
+		for (int j = 0; j < count2; j++)
+		{
+			if (clique1[i] == clique2[j])
+			{
+				flag = TRUE;
+			}
+		}
+		if (!flag)
+			return FALSE;
+	}
+	return TRUE;
+}
 
-	putchar('\n');
+error_t remove_duplicates_from_stack(clique_stack_element_t **head)
+{
+	if (!head)
+		return ERROR_INPUT;
+	clique_stack_element_t *previous = NULL;
+
+	for (clique_stack_element_t *tmp = *head; tmp; tmp = tmp->next)
+	{
+		previous = tmp;
+		for (clique_stack_element_t *tmp2 = tmp->next; tmp2; tmp2 = tmp2->next)
+		{
+			if (tmp->clique_size > tmp2->clique_size)
+			{
+				if (are_cliques_equalient(tmp2->clique, tmp2->clique_size, tmp->clique, tmp->clique_size))
+				{
+					previous->next = tmp2->next;
+					free(tmp2->clique);
+					free(tmp2);
+					tmp2 = previous;
+				}
+			}
+			else
+			{
+				if (are_cliques_equalient(tmp->clique, tmp->clique_size, tmp2->clique, tmp2->clique_size))
+				{
+					previous->next = tmp2->next;
+					free(tmp2->clique);
+					free(tmp2);
+					tmp2 = previous;
+				}
+			}
+			previous = previous->next;
+		}
+	}
 	return SUCCESS;
 }

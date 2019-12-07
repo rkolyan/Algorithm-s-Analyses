@@ -18,3 +18,16 @@ error_t create_matrix_from_file(FILE *file, type_t **matrix, int *count)
 	}
 	return SUCCESS;
 }
+
+boolean is_graph_is_not_oriented(type_t *matrix, int count)
+{
+	for (int i = 0; i < count; i++)
+	{
+		for (int j = i; j < count; j++)
+		{
+			if (matrix[i * count + j] != matrix[j * count + i])
+				return FALSE;
+		}
+	}
+	return TRUE;
+}

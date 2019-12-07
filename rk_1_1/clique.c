@@ -87,9 +87,16 @@ error_t find_cliques(vertice_t *varray, int count, clique_stack_element_t **head
 					flag_undetected = TRUE;
 				}
 			}
-			clique = create_clique_from_number_stack(stack);
-			remove_number_stack(&stack);
-			add_clique_to_clique_stack(head, clique_size, clique);
+			if (clique_size > 2)
+			{
+				clique = create_clique_from_number_stack(stack);
+				remove_number_stack(&stack);
+				add_clique_to_clique_stack(head, clique_size, clique);
+			}
+			else
+			{
+				remove_number_stack(&stack);
+			}
 			first_use = last_undetected;
 		}
 	}

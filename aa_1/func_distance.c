@@ -12,7 +12,7 @@ error_t find_levenstein_distance_recursive(char *s1, char *s2, int length1, int 
 
 	if (length1 == 1 || length2 == 1)
 	{
-		*result = *s1 == *s2 ? 0 : 1;
+		*result = s1[length1 - 1] == s2[length2 - 1] ? 0 : 1;
 		*result += abs(length2 - length1);
 		return SUCCESS;
 	}

@@ -5,3 +5,7 @@
 */experiments/*
 *vgcore.*
 *.pdf
+*.toc
+*.aux
+*.log
+*.gz

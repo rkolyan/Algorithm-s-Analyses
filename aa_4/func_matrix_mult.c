@@ -52,8 +52,9 @@ error_t standard_multiply_matrix(double *matrix1, double *matrix2,
 		(fr + i)->col_count1 = col_count1;
 		(fr + i)->col_count2 = col_count2;
 		thrd_create(threads + i, partly_standard_multiply_matrix, fr + i);
-		thrd_join(threads[i], &error_code);
 	}
+	for (int i = 0; i < threads_count; i++)
+		thrd_join(threads[i], &error_code);
 	return error_code;
 }
 

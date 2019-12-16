@@ -47,8 +47,8 @@ clock_t find_time(double **matrix1, double **matrix2, double **matrix_result, in
 	else //If it is vinograd
 	{
 		double *row_factor = NULL, *col_factor = NULL;
-		row_factor = calloc(row1, sizeof(double));
-		col_factor = calloc(row2, sizeof(double));
+		create_vinograd_array(matrix1, row1, col1, 1, &row_factor);
+		create_vinograd_array(matrix2, row2, col2, 0, &col_factor);
 		timer = clock();
 		functions->vinograd_function(matrix1, matrix2, row_factor, col_factor, row1, col1, row2, col2, matrix_result);
 		timer = clock() - timer;

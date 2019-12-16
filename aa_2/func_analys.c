@@ -4,6 +4,7 @@
 #include "error_codes.h"
 #include "func_forms.h"
 #include "func_analys.h"
+#include "func_matrix_creation.h"
 
 void find_calculations(int count1, int count2, function_t *functions, const char *filename)
 {
@@ -46,8 +47,8 @@ clock_t find_time(double *matr1, double *matr2, double *matr_res, int row1, int 
 	else //If it is vinograd
 	{
 		double *row_factor = NULL, *col_factor = NULL;
-		row_factor = calloc(row1, sizeof(double));
-		col_factor = calloc(row2, sizeof(double));
+		create_vinograd_array(matr1, row1, col1, 1, &row_factor);
+		create_vinograd_array(matr2, row2, col2, 0, &col_factor);
 		timer = clock();
 		functions->vinograd_function(matr1, matr2, row_factor, col_factor, row1, col1, row2, col2, matr_res);
 		timer = clock() - timer;

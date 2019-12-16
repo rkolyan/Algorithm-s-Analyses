@@ -32,8 +32,8 @@ int main(void)
 	print_matr(stdout, matrix_result, row1, col2);
 	putchar('\n');
 	
-	row_factor = calloc(row1, sizeof(double));
-	col_factor = calloc(col2, sizeof(double));
+	create_vinograd_array(matrix1, row1, col1, 1, &row_factor);
+	create_vinograd_array(matrix2, row2, col2, 0, &col_factor);
 	//4)Get result, using vinograd method multiplying
 	vinograd_multiply_matrix(matrix1, matrix2, row_factor, col_factor, row1, col1, row2, col2, matrix_result);
 	print_matr(stdout, matrix_result, row1, col2);

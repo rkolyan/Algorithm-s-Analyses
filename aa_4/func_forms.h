@@ -9,7 +9,7 @@ typedef struct
 	char id;
 	union
 	{
-		error_t (*vinograd_function)(double *, double *, double *, double *, int, int, int, int, thrd_t *, int, double *);
+		error_t (*vinograd_function)(double *, double *, double *, double *, int, int, int, int, thrd_t *, int, function_resourse_t *, double *);
 		error_t (*standard_function)(double *, double *, int, int, int, int, thrd_t *, int, function_resourse_t *, double *);
 	};
 } function_t;

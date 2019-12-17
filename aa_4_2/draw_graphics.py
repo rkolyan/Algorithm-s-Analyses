@@ -14,10 +14,7 @@ def fill_array_of_results(filename):
 def draw_graphic(xarray, yarrays):
     figure = plot.figure();
     plot.plot(xarray, yarrays[0], label = 'Standard Muptiply');
-    #plot.plot(xarray, yarrays[1], label = 'Standard Muptiply Optimized');
-    #plot.plot(xarray, yarrays[1], label = 'Vinograd Multiply');
-    #plot.plot(xarray, yarrays[3], label = 'Vinograd Muptiply Optimized');
-    #plot.plot(xarray, yarrays[4], label = 'Vinograd Muptiply Optimized 2');
+    plot.plot(xarray, yarrays[1], label = 'Vinograd Multiply');
     plot.legend();
     plot.title('Graphics of speed of algorithms');
     plot.ylabel('Process time, clocks');
@@ -28,10 +25,7 @@ def draw_graphic(xarray, yarrays):
 if __name__ == "__main__":
     yarrays = list();
     yarrays.append(fill_array_of_results("calculations/standard_multiply.txt"));
-    #yarrays.append(fill_array_of_results("calculations/standard_multiply_optimized.txt"));
-    #yarrays.append(fill_array_of_results("calculations/vinograd_multiply.txt"));
-    #yarrays.append(fill_array_of_results("calculations/vinograd_multiply_optimized1.txt"));
-    #yarrays.append(fill_array_of_results("calculations/vinograd_multiply_optimized2.txt"));
+    yarrays.append(fill_array_of_results("calculations/vinograd_multiply.txt"));
     xarray = list();
     for i in range(len(yarrays[0])):
         xarray.append(i + 1);

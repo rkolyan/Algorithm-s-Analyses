@@ -172,8 +172,10 @@ D(i-1,j-1) + t(S_1[i],S_2[j])\\
 \right.
 \end{equation}
 
+\newpage
 \subsection{Вывод}
 % Сделай эту каку
+
 % Конструкторская часть
 
 \newpage
@@ -193,9 +195,7 @@ D(i-1,j-1) + t(S_1[i],S_2[j])\\
 
 \newpage
 \subsection{Схемы алгоритмов}
-
-%Добавить сюда картинки из yEd
-
+Ниже приведены схемы стандартного алгоритма Левенштейна\\(Рис. 1-2), рекурсивного алгоритма Левенштейна (Рис. 3-4)\\ и стандартного алгоритма Дамерау-Левенштейна (Рис. 5-6).\\
 \begin{figure}[h!]
 \center{\includegraphics[scale=0.25]{levenstein.png}}
 \caption{Схема стандартного алгоритма Левенштейна (Начало)}
@@ -263,6 +263,7 @@ gcc и некоторые функции из библиотеки glibc (memcpy
 
 \newpage
 \subsection{Листинг кода}
+Ниже приведены реализации алгоритмов на С.\\
 \lstdefinestyle{customc}{
   belowcaptionskip=1\baselineskip,
   breaklines=true,
@@ -274,7 +275,9 @@ gcc и некоторые функции из библиотеки glibc (memcpy
 }
 
 \lstinputlisting[captionpos=b, caption=\label{listings:listing1}Стандартная реализация алгоритма Левенштейна(\ref{images:levenstein}), style=customc]{listing1.c}
+\newpage
 \lstinputlisting[captionpos=b, caption=\label{listings:listing2}Рекурсивная реализация алгоритма Левенштейна(\ref{images:recursive_levenstein}), style=customc]{listing2.c}
+\newpage
 \lstinputlisting[captionpos=b, caption=\label{listings:listing3}Стандартная реализация алгоритма Дамерау-Левенштейна(\ref{images:damerau_levenstein}), style=customc]{listing3.c}
 
 \newpage
@@ -346,7 +349,7 @@ argo & argo & 0 & 0 & 0 \\
 
 Исходя из данного графика можно сделать вывод, что стандартный алгоритм Левенштейна – самый быстрый, а рекурсивный алгоритм – самый медленный. Это может быть обусловлено тем, что в рекурсивной версии алгоритма происходит множество лишних (повторных) вычислений. Возникает очень большое дерево рекурсии. \\
 \begin{figure}[h]
-\center{\includegraphics[scale=1]{graphics.eps}}
+\center{\includegraphics[scale=1]{graphics.png}}
 \caption{График зависимости времени работы алгоритмов от длин строк}
 \label{images:graphics}
 \end{figure}

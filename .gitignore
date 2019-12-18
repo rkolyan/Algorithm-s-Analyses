@@ -2,7 +2,10 @@
 *.o
 *.exe
 *.txt
-*.png
 */experiments/*
 *vgcore.*
 *.pdf
+*.toc
+*.aux
+*.log
+*.gz

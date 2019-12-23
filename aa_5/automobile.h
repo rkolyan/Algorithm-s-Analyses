@@ -10,6 +10,7 @@ typedef char color_id_t;
 
 typedef struct automobile
 {
+	clock_t time_marks[8];
 	detail_t circles;
 	detail_t body;
 	color_id_t color;

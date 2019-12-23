@@ -3,6 +3,6 @@
 
 #include "automobile.h"
 
-void print_automobile(automobile_t *automobile);
+error_t print_automobile(automobile_t *automobile);
 
 #endif

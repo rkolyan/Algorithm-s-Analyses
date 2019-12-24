@@ -44,7 +44,7 @@ error_t vinograd_multiply_matrix(double **matrix1, double **matrix2, double *row
 		for (int i = 0; i < row_count1; i++)
 		{
 			for (int j = 0; j < col_count2; j++)
-				matrix_result[i][j] += matrix1[i][col_count2 - 1] * matrix2[row_count2 - 1][j];
+				matrix_result[i][j] += matrix1[i][col_count1 - 1] * matrix2[row_count2 - 1][j];
 		}
 	}
 

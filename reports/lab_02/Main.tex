@@ -153,6 +153,24 @@ V × W = (v_1 + w_2)(v_2 + w_1) + (v_3 + w_4)(v_4 + w_3) - v_1v_2 - v_3v_4 - w_1
 
 \newpage
 \subsection{Схемы алгоритмов}
+Ниже приведены схемы стандартного алгоритма умножения матриц\\(Рис. 1) и алгоритма Винограда умножения матриц(Рис. 2-3).
+\begin{figure}[h!]
+\center{\includegraphics[scale=0.2]{multiply_standard.png}}
+\caption{Схема стандартного алгоритма умножения матриц}
+\label{images:multiply_standard}
+\end{figure}
+
+\begin{figure}[p]
+\center{\includegraphics[scale=0.25]{multiply_vinograd1.png}}
+\caption{Схема алгоритма Винограда умножения матриц(Начало)}
+\label{images:multiply_vinograd1}
+\end{figure}
+
+\begin{figure}[p]
+\center{\includegraphics[scale=0.25]{multiply_vinograd2.png}}
+\caption{Схема алгоритма Винограда умножения матриц(Конец)}
+\label{images:multiply_vinograd2}
+\end{figure}
 % Как же я ненавижу делать эти схемы
 
 \newpage
@@ -198,11 +216,9 @@ gcc и некоторые функции из библиотеки glibc (memcpy
 }
 
 % В директории надо добавить листинги с кодом
-\lstinputlisting[captionpos=b, caption=\label{listings:listing1}Реализация стандартного алгоритма умножения матрица(\ref{images:standard_multiply}), style=customc]{listing1.c}
+\lstinputlisting[captionpos=b, caption=\label{listings:listing1}Реализация стандартного алгоритма умножения матрица(\ref{images:multiply_standard}), style=customc]{listing1.c}
 \newpage
-\lstinputlisting[captionpos=b, caption=\label{listings:listing2}Реализация алгоритма умножения матриц Винограда(\ref{images:vinograd_multiply}), style=customc]{listing2.c}
-\newpage
-%\lstinputlisting[captionpos=b, caption=\label{listings:listing3}Стандартная реализация алгоритма Дамерау-Левенштейна(\ref{images:damerau_levenstein}), style=customc]{listing3.c}
+\lstinputlisting[captionpos=b, caption=\label{listings:listing2}Реализация алгоритма умножения матриц Винограда(\ref{images:multiply_vinograd1}), style=customc]{listing2.c}
 
 \newpage
 \subsection{Вывод}

@@ -13,12 +13,12 @@ def fill_array_of_results(filename):
 
 def draw_graphic(xarray, yarrays):
     figure = plot.figure();
-    plot.plot(xarray, yarrays[0], label = 'Standard Muptiply');
-    plot.plot(xarray, yarrays[1], label = 'Vinograd Multiply');
+    plot.plot(xarray, yarrays[0], label = 'Стандартный алгоритм');
+    plot.plot(xarray, yarrays[1], label = 'Алгоритм Винограда');
     plot.legend();
-    plot.title('Graphics of speed of algorithms');
-    plot.ylabel('Process time, clocks');
-    plot.xlabel('Matrix side length');
+    #plot.title('График зависимости проц. времени работы от размера кв. матриц');
+    plot.ylabel('Процессорное время, тики');
+    plot.xlabel('Длина стороны квадратной матрицы, кол-во элементов');
     plot.grid(True);
     plot.show();
 

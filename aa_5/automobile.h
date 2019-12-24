@@ -5,6 +5,8 @@
 #define BODY_VARIANTS_COUNT 6
 #define COLOR_VARIANTS_COUNT 7
 
+#include <time.h>
+
 typedef char detail_t;
 typedef char color_id_t;
 

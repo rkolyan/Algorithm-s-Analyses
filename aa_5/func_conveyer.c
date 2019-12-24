@@ -5,13 +5,13 @@ error_t create_body(automobile_t *automobile)
 {
 	if (!automobile)
 		return ERROR_INPUT;
-	automobile->number = rand() % BODY_VARIANTS_COUNT;
+    automobile->body = rand() % BODY_VARIANTS_COUNT;
 	return SUCCESS;
 }
 
 error_t create_circles(automobile_t *automobile)
 {
-	if (!automobile)
+    if (!automobile)
 		return ERROR_INPUT;
 	automobile->circles = rand() % CIRCLE_VARIANTS_COUNT;
 	return SUCCESS;

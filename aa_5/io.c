@@ -1,8 +1,9 @@
+#include "error_codes.h"
 #include "io.h"
 
-char *[CIRCLE_VARIANTS_COUNT] circles = {"Обычные круглые", "Круглые с шипами", "Треугольные гусеничные", "Гусеничные с изменяемой формой"};
-char *[BODY_VARIANTS_COUNT] bodies = {"Грузовик", "Автобус", "Кроссовер", "Спортивный автомобиль", "Кабриолет", "Танк"};
-char *[COLOR_VARIANTS_COUNT] colors = {"Черный", "Желтый", "Красный", "Зеленый", "Розовый", "Фиолетовый", "Белый"};
+char *circles[CIRCLE_VARIANTS_COUNT] = {"Обычные круглые", "Круглые с шипами", "Треугольные гусеничные", "Гусеничные с изменяемой формой"};
+char *bodies[BODY_VARIANTS_COUNT] = {"Грузовик", "Автобус", "Кроссовер", "Спортивный автомобиль", "Кабриолет", "Танк"};
+char *colors[COLOR_VARIANTS_COUNT] = {"Черный", "Желтый", "Красный", "Зеленый", "Розовый", "Фиолетовый", "Белый"};
 
 error_t print_automobile(automobile_t *automobile)
 {

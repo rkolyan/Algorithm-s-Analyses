@@ -13,11 +13,12 @@ void find_calculations(int count1, int count2, function_t *functions, const char
 	double **matrix1 = NULL, **matrix2 = NULL, **matrix_result = NULL;
 	file = fopen(filename, "w");
 	srand(time(NULL));
-	for (int i = 1; i <= count1; i++)
+	char some = 1;
+	for (int i = 100; i <= count1; i += (some % 2) * 100)
 	{
-		create_matrix(i, i, &matrix1);
-		create_matrix(i, i, &matrix2);
-		create_matrix(i, i, &matrix_result);
+		create_matrix(i + (some + 1) % 2, i + (some + 1) % 2, &matrix1);
+		create_matrix(i + (some + 1) % 2, i + (some + 1) % 2, &matrix2);
+		create_matrix(i + (some + 1) % 2, i + (some + 1) % 2, &matrix_result);
 		for (int j = 0; j < count2; j++)
 		{
 			fill_random_matrix_with_size(i, i, matrix1);
@@ -29,6 +30,7 @@ void find_calculations(int count1, int count2, function_t *functions, const char
 		free(matrix1);
 		free(matrix2);
 		free(matrix_result);
+		some++;
 	}
 	fclose(file);
 }

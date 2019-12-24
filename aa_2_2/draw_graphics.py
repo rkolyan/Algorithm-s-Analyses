@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plot
 
 def fill_array_of_results(filename):
-    yarray = [0];
+    yarray = [];
     i = 1;
     tmp_file = open(filename, "r");
     for line in tmp_file:
@@ -26,7 +26,8 @@ if __name__ == "__main__":
     yarrays = list();
     yarrays.append(fill_array_of_results("calculations/standard_multiply.txt"));
     yarrays.append(fill_array_of_results("calculations/vinograd_multiply.txt"));
-    xarray = [0];
-    for i in range(len(yarrays[0]) - 1):
+    xarray = [];
+    for i in range(100, 1002, 100):
+        xarray.append(i);
         xarray.append(i + 1);
     draw_graphic(np.array(xarray), yarrays);

@@ -198,9 +198,9 @@ gcc и некоторые функции из библиотеки glibc (memcpy
 }
 
 % В директории надо добавить листинги с кодом
-%\lstinputlisting[captionpos=b, caption=\label{listings:listing1}Стандартная реализация алгоритма Левенштейна(\ref{images:levenstein}), style=customc]{listing1.c}
+\lstinputlisting[captionpos=b, caption=\label{listings:listing1}Реализация стандартного алгоритма умножения матрица(\ref{images:standard_multiply}), style=customc]{listing1.c}
 \newpage
-%\lstinputlisting[captionpos=b, caption=\label{listings:listing2}Рекурсивная реализация алгоритма Левенштейна(\ref{images:recursive_levenstein}), style=customc]{listing2.c}
+\lstinputlisting[captionpos=b, caption=\label{listings:listing2}Реализация алгоритма умножения матриц Винограда(\ref{images:vinograd_multiply}), style=customc]{listing2.c}
 \newpage
 %\lstinputlisting[captionpos=b, caption=\label{listings:listing3}Стандартная реализация алгоритма Дамерау-Левенштейна(\ref{images:damerau_levenstein}), style=customc]{listing3.c}
 
@@ -224,7 +224,7 @@ gcc и некоторые функции из библиотеки glibc (memcpy
 На Рис., предсавленном ниже, демонстрируется работа приложения. Запуск приложения осуществляется из эмулятора терминала в Arch Linux. Во время работы приложение запрашивает у пользователя ввод параметров матриц, а также ввод отдельных строк каждой матрицы. На выходе она печатает
 \end{flushleft}
 \begin{figure}[h]
-\center{\includegraphics[scale=0.5]{example.png}}
+\center{\includegraphics[scale=0.6]{example.png}}
 \caption{Пример работы приложения}
 \label{images:example}
 \end{figure}
@@ -253,7 +253,7 @@ gcc и некоторые функции из библиотеки glibc (memcpy
 \subsection{Сравнительный анализ на материале экспериментальных данных}
 % Картинку надо поменять и вставить к ней соответствующий текст
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \center{\includegraphics[scale=1]{graphics.png}}
 \caption{График зависимости времени работы алгоритмов от длин сторон матриц}
 \label{images:graphics}

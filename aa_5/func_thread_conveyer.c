@@ -1,54 +1,58 @@
 #include "func_thread_conveyer.h"
 
-error_t begin_first_conveyer(error_t (*func)(automobile_t *), thread_resource_t *previous_queue, thread_resource_t *current_queue, mtx_t *current_mutex)
+error_t begin_first_conveyer(void *function_resourse)
 {
-	if (!func || !previous_queue || !current_queue || !current_mutex)
+	function_resourse_t *fr = function_resourse;
+	if (!fr->func || !fr->previous_queue || !fr->current_queue || !fr->current_mutex)
 		return ERROR_INPUT;
 	automobile_t *automobile = NULL;
-	while(previous_queue->object_counter)
+	
+	while(fr->previous_queue->object_counter)
 	{
-        remove_from_queue(previous_queue, &automobile);
-		func(automobile);
-        mutex_lock(current_mutex);
-        add_to_queue(current_queue, automobile);
-		mutex_unlock(current_mutex);
-		previous_queue->object_counter--;
+		remove_from_queue(fr->previous_queue, &automobile);
+		fr->func(automobile);
+		mtx_lock(fr->current_mutex);
+		add_to_queue(fr->current_queue, automobile);
+		mtx_unlock(fr->current_mutex);
+		fr->previous_queue->object_counter--;
 	}
 	return SUCCESS;
 }
 
-error_t begin_conveyer(error_t (*func)(automobile_t *), thread_resource_t *previous_queue, thread_resource_t *current_queue, mtx_t *previous_mutex, mtx_t *current_mutex)
+error_t begin_conveyer(void *function_resourse)
 {
-	if (!func || !previous_queue || !current_queue || !previous_mutex || !current_mutex)
+	function_resourse_t *fr = function_resourse;
+	if (!fr->func || !fr->previous_queue || !fr->current_queue || !fr->previous_mutex || !fr->current_mutex)
 		return ERROR_INPUT;
 	automobile_t *automobile = NULL;
 	while(1)
 	{
-		mutex_lock(previous_mutex);
-        remove_from_queue(previous_queue, &automobile);
-		mutex_unlock(previous_mutex);
-		func(automobile);
-		mutex_lock(current_mutex);
-        add_to_queue(current_queue, automobile);
-		mutex_unlock(current_mutex);
-		previous_queue->object_counter--;
+		mtx_lock(fr->previous_mutex);
+		remove_from_queue(fr->previous_queue, &automobile);
+		mtx_unlock(fr->previous_mutex);
+		fr->func(automobile);
+		mtx_lock(fr->current_mutex);
+		add_to_queue(fr->current_queue, automobile);
+		mtx_unlock(fr->current_mutex);
+		fr->previous_queue->object_counter--;
 	}
 	return SUCCESS;
 }
 
-error_t begin_last_conveyer(error_t (*func)(automobile_t *), thread_resource_t *previous_queue, thread_resource_t *current_queue, mtx_t *previous_mutex, unsigned int object_counter)
+error_t begin_last_conveyer(void *function_resourse)
 {
-    if (!func || !previous_queue || !previous_mutex)
+	function_resourse_t *fr = function_resourse;
+    if (!fr->func || !fr->previous_queue || !fr->previous_mutex)
 		return ERROR_INPUT;
 	automobile_t *automobile = NULL;
-    while(object_counter)
+    while(fr->object_counter)
 	{
-		mutex_lock(previous_mutex);
-        remove_from_queue(previous_queue, &automobile);
-		mutex_unlock(previous_mutex);
-        func(automobile);
-        add_to_queue(previous_queue, automobile);
-        object_counter--;
+		mtx_lock(fr->previous_mutex);
+		remove_from_queue(fr->previous_queue, &automobile);
+		mtx_unlock(fr->previous_mutex);
+		fr->func(automobile);
+		add_to_queue(fr->previous_queue, automobile);
+		fr->object_counter--;
 	}
 	return SUCCESS;
 }

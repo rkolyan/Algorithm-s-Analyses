@@ -1,5 +1,5 @@
-#include "error_codes.h"
 #include "io.h"
+#include <stdio.h>
 
 char *circles[CIRCLE_VARIANTS_COUNT] = {"Обычные круглые", "Круглые с шипами", "Треугольные гусеничные", "Гусеничные с изменяемой формой"};
 char *bodies[BODY_VARIANTS_COUNT] = {"Грузовик", "Автобус", "Кроссовер", "Спортивный автомобиль", "Кабриолет", "Танк"};

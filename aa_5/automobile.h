@@ -7,8 +7,8 @@
 
 #include <time.h>
 
-typedef char detail_t;
-typedef char color_id_t;
+typedef int detail_t;
+typedef int color_id_t;
 
 typedef struct automobile
 {

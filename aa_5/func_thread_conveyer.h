@@ -12,11 +12,11 @@ typedef struct
     thread_resource_t *current_queue;
     mtx_t *previous_mutex;
     mtx_t *current_mutex;
-    unsigned int counter;
+    unsigned int object_counter;
 } function_resourse_t;
 
-error_t begin_first_conveyer(function_resourse_t *fr);
-error_t begin_conveyer(function_resourse_t *fr);
-error_t begin_last_conveyer(function_resourse_t *fr);
+error_t begin_first_conveyer(void *fr);
+error_t begin_conveyer(void *fr);
+error_t begin_last_conveyer(void *fr);
 
 #endif

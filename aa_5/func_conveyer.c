@@ -1,5 +1,6 @@
 #include "func_conveyer.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 error_t create_body(automobile_t *automobile)
 {

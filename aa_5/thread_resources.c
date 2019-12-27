@@ -33,6 +33,8 @@ error_t remove_from_queue(thread_resource_t *thread_resource, automobile_t **res
 {
 	if (!thread_resource || !result)
 		return ERROR_INPUT;
+	if (!*result)
+		return SUCCESS;
 	*result = thread_resource->array[thread_resource->object_counter];
 	for (unsigned int i = 1; i < thread_resource->object_counter; i++)
 		thread_resource->array[i - 1] = thread_resource->array[i];
@@ -44,6 +46,8 @@ error_t add_to_queue(thread_resource_t *thread_resource, automobile_t *automobil
 {
 	if (!thread_resource || !automobile)
 		return ERROR_INPUT;
+	if (!automobile)
+		return SUCCESS;
     thread_resource->array[thread_resource->object_counter] = automobile;
     thread_resource->object_counter++;
 	return SUCCESS;

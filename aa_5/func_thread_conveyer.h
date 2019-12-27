@@ -5,6 +5,9 @@
 #include "thread_resources.h"
 #include <threads.h>
 
+#define RESOURCES_COUNT 6
+#define AUTOMOBILE_COUNT 20
+
 typedef struct
 {
     error_t (*func)(automobile_t *);
@@ -18,5 +21,7 @@ typedef struct
 error_t begin_first_conveyer(void *fr);
 error_t begin_conveyer(void *fr);
 error_t begin_last_conveyer(void *fr);
+void fill_fr(function_resourse_t *fr, mtx_t *mutexes, thread_resource_t *resources);
+
 
 #endif

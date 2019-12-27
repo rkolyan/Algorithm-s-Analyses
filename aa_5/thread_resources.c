@@ -33,9 +33,9 @@ error_t remove_from_queue(thread_resource_t *thread_resource, automobile_t **res
 {
 	if (!thread_resource || !result)
 		return ERROR_INPUT;
-	if (!*result)
+	if (!thread_resource->object_counter)
 		return SUCCESS;
-	*result = thread_resource->array[thread_resource->object_counter];
+	*result = thread_resource->array[thread_resource->object_counter - 1];
 	for (unsigned int i = 1; i < thread_resource->object_counter; i++)
 		thread_resource->array[i - 1] = thread_resource->array[i];
 	thread_resource->object_counter--;

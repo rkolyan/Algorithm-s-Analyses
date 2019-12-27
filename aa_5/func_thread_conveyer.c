@@ -1,6 +1,7 @@
 #include "func_thread_conveyer.h"
 #include "io.h"
 #include <stdlib.h>
+#include <time.h>
 
 error_t begin_first_conveyer(void *function_resourse)
 {
@@ -8,7 +9,7 @@ error_t begin_first_conveyer(void *function_resourse)
 	if (!fr->func || !fr->previous_queue || !fr->current_queue || !fr->current_mutex)
 		return ERROR_INPUT;
 	automobile_t *automobile = NULL;
-	
+	srand(time(NULL));
 	while(fr->previous_queue->object_counter)
 	{
 		remove_from_queue(fr->previous_queue, &automobile);
@@ -27,6 +28,7 @@ error_t begin_conveyer(void *function_resourse)
 	if (!fr->func || !fr->previous_queue || !fr->current_queue || !fr->previous_mutex || !fr->current_mutex)
 		return ERROR_INPUT;
 	automobile_t *automobile = NULL;
+	srand(time(NULL));
 	while(1)
 	{
 		mtx_lock(fr->previous_mutex);
@@ -47,6 +49,7 @@ error_t begin_last_conveyer(void *function_resourse)
     if (!fr->func || !fr->previous_queue || !fr->previous_mutex)
 		return ERROR_INPUT;
 	automobile_t *automobile = NULL;
+	srand(time(NULL));
     while(fr->object_counter)
 	{
 		mtx_lock(fr->previous_mutex);

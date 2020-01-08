@@ -29,4 +29,5 @@ void close_output(void)
 {
 	if (file)
 		fclose(file);
+	file = NULL;
 }

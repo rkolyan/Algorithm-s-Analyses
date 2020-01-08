@@ -18,6 +18,7 @@ int main(void)
 	threads = calloc(RESOURCES_COUNT - 1, sizeof (thrd_t));
 	fill_fr(fr, mutexes, all_resources);
 	open_output();
+
 	for (int i = 0; i < RESOURCES_COUNT - 1; i++)
 	    mtx_init(mutexes + i, mtx_plain | mtx_recursive);
 	
@@ -25,7 +26,7 @@ int main(void)
 	for (int i = 1; i < RESOURCES_COUNT - 2; i++)
 	    thrd_create(threads + i, begin_conveyer, fr + i);
 	thrd_create(threads + RESOURCES_COUNT - 2, begin_last_conveyer, fr + RESOURCES_COUNT - 2);
-	thrd_join(*threads, NULL);
+	thrd_join(threads[0], NULL);
 	thrd_join(threads[RESOURCES_COUNT - 2], NULL);
 	
 	for (int i = 0; i < RESOURCES_COUNT - 1; i++)
@@ -33,6 +34,7 @@ int main(void)
 	
 	close_output();
 	free(mutexes);
+	free_all_automobiles(all_resources + RESOURCES_COUNT - 1);
 	free_thread_resources_array(all_resources, RESOURCES_COUNT);
 	free(fr);
 	free(threads);

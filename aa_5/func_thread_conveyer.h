@@ -6,7 +6,7 @@
 #include <threads.h>
 
 #define RESOURCES_COUNT 6
-#define AUTOMOBILE_COUNT 20
+#define AUTOMOBILE_COUNT 50
 
 typedef struct
 {

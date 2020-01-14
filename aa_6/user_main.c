@@ -24,7 +24,7 @@ int main (void)
 	initialize_matrix(&pheromone_matrix, N);
 	initialize_matrix(&distance_matrix, N);
 	initialize_ants(&ants, M, N, A);
-	ant_colny_optimize(main_distance_matrix, distance_matrix, pheromone_matrix, ants, M, N, A - 1, B - 1, way);
+	ant_colony_optimize(main_distance_matrix, distance_matrix, pheromone_matrix, ants, M, N, A - 1, B - 1, way);
 	free_ants(&ants, M);
 	free_matrix(&distance_matrix);
 	free_matrix(&pheromone_matrix);

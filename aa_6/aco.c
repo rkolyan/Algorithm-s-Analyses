@@ -80,7 +80,7 @@ error_t free_ants(way_t ***ants, int ant_count)
 }
 
 // вероятность перехода муравья ant в вершину to
-double probability (int to, way_t *ant, double **pheromone_matrix, double **distance_matrix, int vertex_count)
+static double find_probability (int to, way_t *ant, double **pheromone_matrix, double **distance_matrix, int vertex_count)
 {
 	// если вершина уже посещена, возвращаем 0
 	for (int i = 0; i < ant->itabu; ++i) 
@@ -106,7 +106,7 @@ double probability (int to, way_t *ant, double **pheromone_matrix, double **dist
 }
  
 // основная функция алгоритма поиска
-way_t *ant_colny_optimize (double **main_distance_matrix, double **distance_matrix, double **pheromone_matrix, 
+way_t *ant_colony_optimize(double **main_distance_matrix, double **distance_matrix, double **pheromone_matrix, 
 						   way_t **ants, int ant_count, int vertex_count, int start, int finish, way_t *way)
 {
 	// инициализация данных о расстоянии и количестве феромона
@@ -135,7 +135,7 @@ way_t *ant_colny_optimize (double **main_distance_matrix, double **distance_matr
 					// Проверка вероятности перехода в вершину j
 					if (ants[k]->tabu[ants[k]->itabu - 1] != j)
 				   	{
-						double p = probability (j, ants[k], pheromone_matrix, distance_matrix, vertex_count);
+						double p = find_probability(j, ants[k], pheromone_matrix, distance_matrix, vertex_count);
 						if (p && p >= p_max)
 					   	{
 							p_max = p;

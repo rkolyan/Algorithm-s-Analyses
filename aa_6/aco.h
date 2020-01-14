@@ -30,7 +30,7 @@ error_t free_matrix(double ***matrix);
 error_t initialize_ants(way_t ***ants, int ant_count, int vertex_count, int start);
 error_t free_ants(way_t ***ants, int ant_count);
  
-way_t *ant_colny_optimize (double **main_distance_matrix, double **distance_matrix, double **pheromone_matrix, 
+way_t *ant_colony_optimize(double **main_distance_matrix, double **distance_matrix, double **pheromone_matrix, 
 						   way_t **ants, int ant_count, int vertex_count, int start, int finish, way_t *way);
 
 #endif

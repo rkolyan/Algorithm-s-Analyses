@@ -8,6 +8,8 @@
 void write_size_of_matrix(int *row);
 //Function for correct vertice parameters input
 void write_first_and_last_vertice(int *vertex_number1, int *vertex_number2, int maximum);
+//Function for correct input aco parameter
+void write_aco_coefficient(const char *type, const char *name, void *res);
 //Function for detecting errors in strings
 error_t write_into_string(double *pointer, int count);
 //Function for input numbers into matrix

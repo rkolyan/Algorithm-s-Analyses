@@ -18,7 +18,7 @@
 // структура ПУТЬ (длинна, массив вершин, количество вершин)
 typedef struct
 {
-	int itabu;
+	int tabu_count;
 	int length;
 	int *tabu;
 } way_t;

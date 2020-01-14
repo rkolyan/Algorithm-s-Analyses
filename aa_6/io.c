@@ -71,6 +71,19 @@ void write_first_and_last_vertice(int *vertex_number1, int *vertex_number2, int 
 	free(s);
 }
 
+void write_aco_coefficient(const char *type, const char *name, void *res)
+{
+	int err = 0;
+	printf("Введите коэффициент %s:", name);
+	do
+	{
+		err = scanf(type, res);
+		if (!err)
+			printf("Значение %s введено некорректно!\n", name);
+	}
+	while (!err);
+}
+
 //Function for detecting errors in strings
 error_t write_into_string(double *matr, int col)
 {
@@ -169,7 +182,7 @@ void print_way(way_t * way)
 {
 	printf("Длина пути: %d\n", way->length);
 	printf("Путь: %d", way->tabu[0] + 1);
-	for (int i = 1; i < way->itabu; ++i)
+	for (int i = 1; i < way->tabu_count; ++i)
 		printf(" -> %d", way->tabu[i] + 1);
 	puts("");
 }

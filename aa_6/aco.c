@@ -9,7 +9,7 @@ error_t initialize_way(way_t **way, int vertex_count)
 	if (!way)
 		return ERROR_INPUT;
 	way_t *new_way = malloc(sizeof(way_t));
-	new_way->itabu = 0;
+	new_way->tabu_count = 0;
 	new_way->length = -1;
 	new_way->tabu = malloc(sizeof(int) * vertex_count);
 	*way = new_way;
@@ -56,7 +56,7 @@ error_t initialize_ants(way_t ***ants, int ant_count, int vertex_count, int star
 	for (int i = 0; i < ant_count; i++)
 	{
 		new_ants[i] = malloc(sizeof(way_t));
-		new_ants[i]->itabu = 1;
+		new_ants[i]->tabu_count = 1;
 		new_ants[i]->length = 0.0;
 		new_ants[i]->tabu = malloc(sizeof(int) * vertex_count);
 		new_ants[i]->tabu[0] = start - 1;
@@ -83,18 +83,18 @@ error_t free_ants(way_t ***ants, int ant_count)
 static double find_probability (int to, way_t *ant, double **pheromone_matrix, double **distance_matrix, int vertex_count)
 {
 	// если вершина уже посещена, возвращаем 0
-	for (int i = 0; i < ant->itabu; ++i) 
+	for (int i = 0; i < ant->tabu_count; ++i) 
 		if (to == ant->tabu[i]) 
 			return 0;
  
 	double sum = 0.0;
-	int from = ant->tabu[ant->itabu - 1];
+	int from = ant->tabu[ant->tabu_count - 1];
 	// считаем сумму в знаминателе
 	for (int j = 0; j < vertex_count; ++j) 
 	{
 		int flag = 1;
 		// проверяем, посещал ли муравей j вершину
-		for (int i = 0; i < ant->itabu; ++i)
+		for (int i = 0; i < ant->tabu_count; ++i)
 		   	if (j == ant->tabu[i])
 			   	flag = 0;
 		// если нет, тогда прибавляем к общей сумме
@@ -133,7 +133,7 @@ way_t *ant_colony_optimize(double **main_distance_matrix, double **distance_matr
 				double p_max = 0.0;
 				for (int j = 0; j < vertex_count; j++) {
 					// Проверка вероятности перехода в вершину j
-					if (ants[k]->tabu[ants[k]->itabu - 1] != j)
+					if (ants[k]->tabu[ants[k]->tabu_count - 1] != j)
 				   	{
 						double p = find_probability(j, ants[k], pheromone_matrix, distance_matrix, vertex_count);
 						if (p && p >= p_max)
@@ -143,28 +143,28 @@ way_t *ant_colony_optimize(double **main_distance_matrix, double **distance_matr
 						}
 					}
 				}
-				ants[k]->length += main_distance_matrix[ants[k]->tabu[ants[k]->itabu - 1]][j_max];
-				ants[k]->tabu[ants[k]->itabu++] = j_max;
+				ants[k]->length += main_distance_matrix[ants[k]->tabu[ants[k]->tabu_count - 1]][j_max];
+				ants[k]->tabu[ants[k]->tabu_count++] = j_max;
 			}
-		   	while (ants[k]->tabu[ants[k]->itabu - 1] != finish);
+		   	while (ants[k]->tabu[ants[k]->tabu_count - 1] != finish);
 			// оставляем феромон на пути муравья
-			for (int i = 0; i < ants[k]->itabu - 1; ++i)
+			for (int i = 0; i < ants[k]->tabu_count - 1; ++i)
 		   	{
-				int from = ants[k]->tabu[i % ants[k]->itabu];
-				int to = ants[k]->tabu[(i + 1) % ants[k]->itabu];
+				int from = ants[k]->tabu[i % ants[k]->tabu_count];
+				int to = ants[k]->tabu[(i + 1) % ants[k]->tabu_count];
 				pheromone_matrix[from][to] += Q / ants[k]->length;
 				pheromone_matrix[to][from] = pheromone_matrix[from][to];
 			}
 			// проверка на лучшее решение
 			if (ants[k]->length < way->length || way->length < 0)
 		   	{
-				way->itabu = ants[k]->itabu;
+				way->tabu_count = ants[k]->tabu_count;
 				way->length = ants[k]->length;
-				for (int i = 0; i < way->itabu; ++i)
+				for (int i = 0; i < way->tabu_count; ++i)
 				   	way->tabu[i] = ants[k]->tabu[i];
 			}
 			// обновление муравьев
-			ants[k]->itabu = 1;
+			ants[k]->tabu_count = 1;
 			ants[k]->length = 0.0;
 		}
 		// цикл по ребрам

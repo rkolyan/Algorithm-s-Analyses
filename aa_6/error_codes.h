@@ -8,5 +8,6 @@ typedef int error_t;
 #define ERROR_INPUT -2
 #define ERROR_ALLOCATE -3
 #define ERROR_FREE -4
+#define ERROR_NOT_IN_STRING -5
 
 #endif

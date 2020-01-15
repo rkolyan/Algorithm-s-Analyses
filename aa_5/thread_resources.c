@@ -23,15 +23,15 @@ error_t create_thread_resources_array(thread_resource_t **array, unsigned int le
 	return SUCCESS;
 }
 
-void free_thread_resources_array(thread_resource_t *array, unsigned int length)
+void free_thread_resources_array(thread_resource_t *resources, unsigned int length)
 {
     for (unsigned int i = 0; i < length; i++)
 	{
-		//for (unsigned int j = 0; j < (array + i)->object_counter; j++)
-		//	free(((array + i)->array)[j]);
-		free((array + i)->array);
+		for (unsigned int j = 0; j < (resources + i)->object_counter; j++)
+			free(((resources + i)->array)[j]);
+		free((resources + i)->array);
 	}
-	free(array);
+	free(resources);
 }
 
 error_t remove_from_queue(thread_resource_t *thread_resource, automobile_t **result)

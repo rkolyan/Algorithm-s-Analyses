@@ -28,13 +28,15 @@ int main(void)
 	thrd_create(threads + RESOURCES_COUNT - 2, begin_last_conveyer, fr + RESOURCES_COUNT - 2);
 	thrd_join(threads[0], NULL);
 	thrd_join(threads[RESOURCES_COUNT - 2], NULL);
-	
+
 	for (int i = 0; i < RESOURCES_COUNT - 1; i++)
 	    mtx_destroy(mutexes + i);
 	
+	for (int i = 1; i < RESOURCES_COUNT - 2; i++)
+		thrd_detach(threads[i]);
+	
 	close_output();
 	free(mutexes);
-	free_all_automobiles(all_resources + RESOURCES_COUNT - 1);
 	free_thread_resources_array(all_resources, RESOURCES_COUNT);
 	free(fr);
 	free(threads);

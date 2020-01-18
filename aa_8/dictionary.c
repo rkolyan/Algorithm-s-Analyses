@@ -19,9 +19,9 @@ static void fill_dictionary_default(dictionary_t *element)
 		element->nexts = NULL;
 }
 
-static dictionary_t *update_dictionary_node_and_return_next(dictionary_t *dictionary, char symbol_position)
+static dictionary_t *update_dictionary_node_and_return_next(dictionary_t *dictionary, int symbol_position)
 {
-	dictionary_t **nexts = malloc(sizeof(dictionary_t *) * dictionary->count + 1);
+	dictionary_t **nexts = malloc(sizeof(dictionary_t *) * (dictionary->count + 1));
 	if (!nexts)
 		return NULL;
 	for (int i = 0; i < dictionary->count; i++)
@@ -33,7 +33,7 @@ static dictionary_t *update_dictionary_node_and_return_next(dictionary_t *dictio
 		return NULL;
 	}
 	dictionary->count++;
-	dictionary->next_symbol_positions[dictionary->count];
+	dictionary->next_symbol_positions[symbol_position] = dictionary->count;
 	free(dictionary->nexts);
 	dictionary->nexts = nexts;
 	return dictionary->nexts[dictionary->count - 1];
@@ -46,8 +46,8 @@ error_t add_word_to_dictionary(dictionary_t ***dictionary, char *word, int lengt
 	if (!length)
 		return SUCCESS;
 	
-	char delta_symbol = return_symbol_delta_code(*word);
-	char position = 0;
+	int delta_symbol = return_symbol_delta_code(*word);
+	int position = 0;
 
 	if (delta_symbol == -1)
 		return ERROR_INCORRECT;
@@ -57,7 +57,7 @@ error_t add_word_to_dictionary(dictionary_t ***dictionary, char *word, int lengt
 		*dictionary = malloc(sizeof(dictionary_t *) * ALPHABET_SIZE);
 		if (!*dictionary)
 			return ERROR_ALLOCATE;
-		for (int i = 0; i < ALPHABET_SIZE)
+		for (int i = 0; i < ALPHABET_SIZE; i++)
 			(*dictionary)[i] = NULL;
 	}
 	
@@ -69,14 +69,14 @@ error_t add_word_to_dictionary(dictionary_t ***dictionary, char *word, int lengt
 			return ERROR_ALLOCATE;
 		fill_dictionary_default((*dictionary)[delta_symbol]);
 	}
-	current_node = dictionary[delta_symbol];
+	current_node = (*dictionary)[delta_symbol];
 
 	for (int i = 1; i < length; i++)
 	{
-		delta_symbol = return_symbol_delta_code(*word);
+		delta_symbol = return_symbol_delta_code(word[i]);
 		if (delta_symbol == -1)
 			return ERROR_INCORRECT;
-		if (position = current_node->next_symbol_positions[delta_symbol])
+		if ((position = current_node->next_symbol_positions[delta_symbol]))
 		{
 			current_node = current_node->nexts[position - 1];
 		}
@@ -92,7 +92,7 @@ error_t add_word_to_dictionary(dictionary_t ***dictionary, char *word, int lengt
 	return SUCCESS;
 }
 
-error_t delete_dictionary(dictionary_t **dictionary, int count);
+error_t delete_dictionary(dictionary_t **dictionary, int count)
 {
 	if (!dictionary)
 		return ERROR_INPUT;
@@ -118,8 +118,8 @@ error_t is_word_in_dictionary(dictionary_t **dictionary, char *word, int length,
 	if (!length)
 		return SUCCESS;
 	
-	char delta_symbol = return_symbol_delta_code(*word);
-	char position = 0;
+	int delta_symbol = return_symbol_delta_code(*word);
+	int position = 0;
 	*result = 0;
 
 	if (delta_symbol < 0)

@@ -30,31 +30,9 @@ error_t is_needle_in_haystack_usual(char *haystack, int hlength, char *needle, i
 	return SUCCESS;
 }
 
-/*
-error_t is_needle_in_haystack_boyer_mur(char *haystack, int hlength, char *needle, int nlength, int *result)
-{
-	if (!needle || !haystack || !nlength || !hlength || !result)
-		return ERROR_INPUT;
-	*result = -1;
-	int count = 0;
-	for (int i = 0; i < hlength && i + nlength - 1 < hlength; i++)
-	{
-		if (needle[nlength - 1] == haystack[i + nlength - 1])
-		{
-			for (count = nlength - 2; count >= 0 && needle[count] == haystack[i + count]; count--);
-			if (count == -1)
-			{
-				*result = i;
-				break;
-			}
-			i += count;
-		}
-	}
-	return SUCCESS;
-}
-*/
 
-static error_t fill_shift_array(int *shift_array, char *string, int length)
+
+static error_t fill_shift_array1(int *shift_array, char *string, int length)
 {
 	if (!shift_array || !string || !length)
 		return ERROR_INPUT;
@@ -74,9 +52,8 @@ static error_t fill_shift_array(int *shift_array, char *string, int length)
 	return SUCCESS;
 }
 
-//Bad symbol version
 error_t is_needle_in_haystack_boyer_mur_horpuskul(char *haystack, int hlength, char *needle, int nlength, 
-									    int *shift_array, int *result)
+			   								      int *shift_array, int *result)
 {
 	if (!needle || !haystack || !nlength || !hlength || !shift_array || !result)
 		return ERROR_INPUT;
@@ -85,7 +62,7 @@ error_t is_needle_in_haystack_boyer_mur_horpuskul(char *haystack, int hlength, c
 		*result = -1;
 		return SUCCESS;
 	}
-	fill_shift_array(shift_array, needle, nlength);
+	fill_shift_array1(shift_array, needle, nlength);
 	for (int i = 0; i <= hlength - nlength;)
 	{
 		*result = i;
@@ -103,6 +80,88 @@ error_t is_needle_in_haystack_boyer_mur_horpuskul(char *haystack, int hlength, c
 	}
 	return SUCCESS;
 }
+
+
+
+static error_t fill_shift_array2(int *shift_array, char *string, int length)
+{
+	if (!shift_array || !string || !length)
+		return ERROR_INPUT;
+	for (int i = 0; i < SHIFT_ARRAY_SIZE; i++)
+		shift_array[i] = -1;
+	for (int i = length - 2; i >= 0; i--)
+	{
+		if (shift_array[(int)string[i]] == -1)
+			shift_array[(int)string[i]] = i;
+	}
+	for (int i = 0; i < SHIFT_ARRAY_SIZE; i++)
+	{
+		if (shift_array[i] == -1)
+			shift_array[i] = length;
+	}
+	return SUCCESS;
+}
+
+static error_t fill_suffix_array(int *suffix_array, char *string, int length)
+{
+	if (!suffix_array || !string || !length)
+		return ERROR_INPUT;
+	char fact = 0;
+	for (int i = length - 1; i >= 0; i--)
+	{
+		for (int j = i - 1; j >= 0; j--)
+		{
+			fact = 1;
+			for (int k = 0; k < length - i && fact; k++)
+			{
+				if (string[j + k] != string[i + k])
+					fact = 0;
+			}
+			if (fact)
+			{
+				suffix_array[i] = i - j;
+				break;
+			}
+		}
+		if (!fact)
+			suffix_array[i] = length;
+	}
+	return SUCCESS;
+}
+
+static int max(int a, int b)
+{
+	if (a > b)
+		return a;
+	else
+		return b;
+}
+
+error_t is_needle_in_haystack_boyer_mur(char *haystack, int hlength, char *needle, int nlength, 
+			   							int *shift_array, int *suffix_array, int *result)
+{
+	if (!haystack || !needle || !hlength || !nlength || !shift_array || !result)
+		return ERROR_INPUT;
+	fill_shift_array2(shift_array, needle, nlength);
+	fill_suffix_array(suffix_array, needle, nlength);
+	int j = 0;
+	for (int i = 0; i <= hlength - nlength;)
+	{
+		for (j = nlength - 1; j >= 0 && needle[j] == haystack[i + j]; j--);
+		if (j >= 0)
+		{
+			i += max(suffix_array[j], j - shift_array[i + j]);
+		}
+		else
+		{
+			*result = i;
+			return SUCCESS;//OR ADD TO LIST
+		}
+	}
+	return SUCCESS;
+}
+
+
 
 static error_t fill_prefix_array(char *string, int length, int *prefix_array)
 {

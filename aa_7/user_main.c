@@ -12,13 +12,15 @@ int main(int args_count, char **strings)
 		return 0;
 	}
 	int hlength = 0, nlength = 0, result1 = 0, result2 = 0, result3 = 0;
-	int *prefix_array = NULL;
+	int *prefix_array = NULL, *shift_array = NULL;
 	
 	hlength = strlen(strings[1]);
 	nlength = strlen(strings[2]);
 
 	is_needle_in_haystack_usual(strings[1], hlength, strings[2], nlength, &result1);
-	is_needle_in_haystack_boyer_mur(strings[1], hlength, strings[2], nlength, &result2);
+	shift_array = malloc(sizeof(int) * SHIFT_ARRAY_SIZE);
+	is_needle_in_haystack_boyer_mur_horpuskul(strings[1], hlength, strings[2], nlength, shift_array, &result2);
+	free(shift_array);
 	prefix_array = malloc(sizeof(int) * nlength);
 	is_needle_in_haystack_knut_morris_prat(strings[1], hlength, strings[2], nlength, prefix_array, &result3);
 	free(prefix_array);

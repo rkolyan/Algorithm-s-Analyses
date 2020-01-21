@@ -9,14 +9,18 @@ int main(int args_count, char **strings)
 	if (args_count != 3)
 	{
 		puts("Вы должны ввести команду вида:\n./app.exe haystack needle");
-		return 0;
+		return SUCCESS;
 	}
 	int hlength = 0, nlength = 0, result1 = 0, result2 = 0, result3 = 0, result4 = 0;
 	int *prefix_array = NULL, *shift_array = NULL, *suffix_array = NULL;
 	
 	hlength = strlen(strings[1]);
 	nlength = strlen(strings[2]);
-
+	if (hlength > nlength)
+	{
+		puts("Длина образца должна быть не больше, чем длина основной строки!");
+		return SUCCESS;
+	}
 	is_needle_in_haystack_usual(strings[1], hlength, strings[2], nlength, &result1);
 	shift_array = malloc(sizeof(int) * SHIFT_ARRAY_SIZE);
 	suffix_array = malloc(sizeof(int) * (nlength + 1));

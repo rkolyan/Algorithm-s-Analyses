@@ -78,7 +78,10 @@ error_t find_levenstein_distance_modified_matrix_version(char *s1, char *s2, int
 	{
 		for (int j = 1; j < length2 + 1; j++)
 		{
-			tmp = (s1[i - 1] == s2[j - 1]) ? 0 : 1;
+			if (s1[i] == s2[j - 1] && s1[i - 1] == s2[j])
+				tmp = 0;
+			else
+				tmp = 1;
 			matrix[i * (length2 + 1) + j] = find_minimum(4, matrix[i * (length2 + 1) + j - 1] + 1,  matrix[(i - 1) * (length2 + 1) + j] + 1,
 					matrix[(i - 1) * (length2 + 1) + j - 1] + tmp, matrix[(i - 2) * (length2 + 1) + j - 1] + 1);
 		}

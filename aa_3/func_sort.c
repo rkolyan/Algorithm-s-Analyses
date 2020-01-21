@@ -27,7 +27,7 @@ error_t sort_min_max(type_t *array, int count)
 				maximum_index = i;
 			}
 		}
-		if (maximum_index == k || minimum_index == count - k - 1)
+		if (maximum_index == k && minimum_index == count - k - 1)
 		{
 			array[k] = minimum;
 			array[count - k - 1] = maximum;

@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 		print_matrix(matr, l1, l2, s1, s2);
 		find_levenstein_distance_recursive(s1, s2, l1, l2, &result);
 		printf("Расстояние Левенштейна (рекурсивный алгоритм) между s1 и s2 = %u\n", result);
-		find_levenstein_distance_modified_matrix_sum_version(s1, s2, l1, l2, &result, matr);
+		find_levenstein_distance_modified_matrix_version(s1, s2, l1, l2, &result, matr);
 		printf("Расстояние Левенштейна (модифицированный алгоритм) между s1 и s2 = %u\n", result);
 		free(matr);
 	}

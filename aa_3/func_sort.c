@@ -21,16 +21,25 @@ error_t sort_min_max(type_t *array, int count)
 				minimum = array[i];
 				minimum_index = i;
 			}
-			if (maximum < array[i])
+			if (maximum <= array[i])
 			{
 				maximum = array[i];
 				maximum_index = i;
 			}
 		}
-		if (maximum_index == k && minimum_index == count - k - 1)
+		if (maximum_index == k)
 		{
-			array[k] = minimum;
-			array[count - k - 1] = maximum;
+			tmp = array[k];
+			array[k] = array[minimum_index];
+			array[minimum_index] = array[count - k - 1];
+			array[count - k - 1] = tmp;
+		}
+		else if (minimum_index == count - k - 1)
+		{
+			tmp = array[count - k - 1];
+			array[count - k - 1] = array[maximum_index];
+			array[maximum_index] = array[k];
+			array[k] = tmp;
 		}
 		else
 		{

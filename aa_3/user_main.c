@@ -22,14 +22,17 @@ int main(void)
 	
 	//2)Get result, using min and max sorting
 	sort_min_max(array1, length);
+	puts("Двусторонняя сортировка выбором:");
 	print_array(stdout, array1, length);
 	
 	//3)Get result, using bubble sorting
 	sort_bubble(array2, length);
+	puts("Сортировка пузырьком:");
 	print_array(stdout, array2, length);
 
 	//4)Get result, using shaker sorting
 	sort_shaker(array3, length);
+	puts("Шейкерная сортировка:");
 	print_array(stdout, array3, length);
 	putchar('\n');
 	

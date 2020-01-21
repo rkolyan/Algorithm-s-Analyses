@@ -19,8 +19,8 @@ int main(int args_count, char **strings)
 
 	is_needle_in_haystack_usual(strings[1], hlength, strings[2], nlength, &result1);
 	shift_array = malloc(sizeof(int) * SHIFT_ARRAY_SIZE);
-	suffix_array = malloc(sizeof(int) * nlength);
-	is_needle_in_haystack_boyer_mur(strings[1], hlength, strings[2], nlength, shift_array, suffix_array, &result2);
+	suffix_array = malloc(sizeof(int) * (nlength + 1));
+	is_needle_in_haystack_boyer_mur(strings[1], hlength, strings[2], nlength, suffix_array, &result2);
 	is_needle_in_haystack_boyer_mur_horpuskul(strings[1], hlength, strings[2], nlength, shift_array, &result3);
 	free(suffix_array);
 	free(shift_array);

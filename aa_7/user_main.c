@@ -16,7 +16,7 @@ int main(int args_count, char **strings)
 	
 	hlength = strlen(strings[1]);
 	nlength = strlen(strings[2]);
-	if (hlength > nlength)
+	if (hlength < nlength)
 	{
 		puts("Длина образца должна быть не больше, чем длина основной строки!");
 		return SUCCESS;

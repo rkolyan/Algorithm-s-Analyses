@@ -21,21 +21,23 @@ static error_t fill_prefix_array(char *string, int length, int *prefix_array)
 
 //Prefix version
 error_t is_needle_in_haystack_knut_morris_prat(char *haystack, int hlength, char *needle, int nlength, 
-											   int *prefix_array, int *result)
+											   int *prefix_array, list_t **list_head)
 {
-	if (!needle || !haystack || !nlength || !hlength || !prefix_array || !result)
+	if (!needle || !haystack || !nlength || !hlength || !prefix_array || !list_head)
 		return ERROR_INPUT;
 	int prefix = 0, i = 0;
-	*result = -1;
 	fill_prefix_array(needle, nlength, prefix_array);
-	for (i = 0; i < hlength && prefix != nlength; i++)
+	for (i = 0; i < hlength; i++)
 	{
 		while (prefix && needle[prefix] != haystack[i])
 			prefix = prefix_array[prefix - 1];
 		if (needle[prefix] == haystack[i])
 			prefix++;
+		if (prefix == nlength)
+		{
+			add_element_to_list(list_head, i - nlength + 1);//TODO: Мне кажется здесь что-то не так
+			prefix = 0;
+		}
 	}
-	if (prefix == nlength)
-		*result = i - nlength;
 	return SUCCESS;
 }

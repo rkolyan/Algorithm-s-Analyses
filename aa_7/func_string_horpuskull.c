@@ -1,5 +1,4 @@
 #include "func_string.h"
-#include <stdio.h>
 #include <string.h>
 
 static error_t fill_shift_array(int *shift_array, char *string, int length)
@@ -23,30 +22,30 @@ static error_t fill_shift_array(int *shift_array, char *string, int length)
 }
 
 error_t is_needle_in_haystack_boyer_mur_horpuskul(char *haystack, int hlength, char *needle, int nlength, 
-			   								      int *shift_array, int *result)
+			   								      int *shift_array, list_t **list_head)
 {
-	if (!needle || !haystack || !nlength || !hlength || !shift_array || !result)
+	if (!needle || !haystack || !nlength || !hlength || hlength < nlength || !shift_array || !list_head)
 		return ERROR_INPUT;
-	if (nlength > hlength)
-	{
-		*result = -1;
-		return SUCCESS;
-	}
+
 	fill_shift_array(shift_array, needle, nlength);
+	int tmp_result = 0;
 	for (int i = 0; i <= hlength - nlength;)
 	{
-		*result = i;
+		tmp_result = i;
 		for (int j = nlength - 1; j >= 0; j--)
 		{
 			if (needle[j] != haystack[i + j])
 			{
-				*result = -1;
+				tmp_result = -1;
 				i += shift_array[(int)haystack[i + j]];
 				break;
 			}
 		}
-		if (*result != -1)
-			return SUCCESS;
+		if (tmp_result != -1)
+		{
+			add_element_to_list(list_head, tmp_result);
+			i++;
+		}
 	}
 	return SUCCESS;
 }

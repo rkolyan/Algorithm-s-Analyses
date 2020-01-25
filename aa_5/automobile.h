@@ -5,6 +5,8 @@
 #define BODY_VARIANTS_COUNT 6
 #define COLOR_VARIANTS_COUNT 7
 
+#define AUTOMOBILE_COUNT 1000
+
 #include <time.h>
 
 typedef int detail_t;

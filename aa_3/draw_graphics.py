@@ -13,13 +13,13 @@ def fill_array_of_results(filename):
 
 def draw_graphic(xarray, yarrays, message):
     figure = plot.figure();
-    plot.plot(xarray, yarrays[0], label = 'Sort min/max');
-    plot.plot(xarray, yarrays[1], label = 'Sort bubble');
-    plot.plot(xarray, yarrays[2], label = 'Sort shaker');
+    plot.plot(xarray, yarrays[0], label = 'Сортировка минимум/максимум');
+    plot.plot(xarray, yarrays[1], label = 'Сортировка пузырьком');
+    plot.plot(xarray, yarrays[2], label = 'Сортировка шейкером');
     plot.legend();
-    plot.title('Graphics of speed of algorithms ' + message);
-    plot.ylabel('Process time, clocks');
-    plot.xlabel('Array length');
+    plot.title('Скорость работы алгоритма ' + message);
+    plot.ylabel('Процессорное время, тики');
+    plot.xlabel('Длина массива, количество элементов');
     plot.grid(True);
     plot.show();
 
@@ -37,6 +37,6 @@ if __name__ == "__main__":
     xarray = [0];
     for i in range(len(yarrays[0]) - 1):
         xarray.append(i + 1);
-    draw_graphic(np.array(xarray), yarrays, '(random)');
-    draw_graphic(np.array(xarray), yarrays[3:], '(sorted)');
-    draw_graphic(np.array(xarray), yarrays[6:], '(unsorted)');
+    draw_graphic(np.array(xarray), yarrays, '(случайный массив)');
+    draw_graphic(np.array(xarray), yarrays[3:], '(отсортированный по возрастанию массив)');
+    draw_graphic(np.array(xarray), yarrays[6:], '(отсортированный по убыванию массив)');

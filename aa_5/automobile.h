@@ -5,7 +5,7 @@
 #define BODY_VARIANTS_COUNT 6
 #define COLOR_VARIANTS_COUNT 7
 
-#define AUTOMOBILE_COUNT 1000
+#define AUTOMOBILE_COUNT 20000
 
 #include <time.h>
 

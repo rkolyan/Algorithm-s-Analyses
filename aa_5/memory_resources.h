@@ -4,7 +4,7 @@
 #include "automobile.h"
 #include "error_codes.h"
 
-#define MAX_ARRAY_LENGTH 1000
+#define MAX_ARRAY_LENGTH 20000
 
 typedef struct
 {

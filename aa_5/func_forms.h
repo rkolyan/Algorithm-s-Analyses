@@ -3,6 +3,14 @@
 
 #include "error_codes.h"
 
-//TODO:typedef error_t (*function_p)(type_t *, int);
+typedef struct
+{
+	char type;
+	union
+	{
+		error_t (multithread_function*)(void);//TODO:Exchange void on parameters
+		error_t (linear_version*)(void);
+	}
+} function_t;
 
 #endif

@@ -23,6 +23,7 @@ void find_calculations(int count1, int count2, int threads_count, function_t *fu
 	file = fopen(filename, "w");
 	for (int i = 1; i <= threads_count; i++)
 	{
+		clocks = 0;
 		for (int j = 0; j < count2; j++)
 		{
 			fill_random_matrix_with_size(count1, count1, matrix1);

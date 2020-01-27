@@ -109,10 +109,117 @@
 \end{enumerate}
 Похожая идея используется в шейкерной сортировке, которая является вариантом пузырьковой сортировки. Проходя по неотсортированной части массива, мы кроме максимума также попутно находим и минимум. Минимум ставим на первое место, максимум на последнее. Таким образом, неотсортированная часть при каждой итерации уменьшается сразу на два элемента[\ref{site:habr}].
 
+\newpage
+\subsection{Псевдокоды алгоритмов сортировок}
+Псевдокод алгоритма сортировки пузырьком:\\
+1 $F \leftarrow 1$ \\
+2 while $F = 1$	\\
+3 \quad do $F \leftarrow 0$\\
+4 \quad\,  for $i \leftarrow 1$ to $n - 1$ \\
+5 \quad\,\quad do if $A[i] > A[i + 1]$\\
+6 \quad\,\quad\,\quad  then $t \leftarrow A[i]$\\
+7 \quad\,\quad\,\quad\, $A[i] \leftarrow A[i + 1]$\\
+8 \quad\,\quad\,\quad\, $A[i + 1] \leftarrow t$\\
+9 \quad\,\quad\,\quad\, $F \leftarrow 1$ \\
+10 end\\
+
+Псевдокод алгоритма шейкерной сортировки:\\
+1 $F \leftarrow 1$ \\
+2 $k \leftarrow 1$ \\
+3 while $F = 1$ and $k < \frac{n}{2}$\\
+4 \quad do $F \leftarrow 0$\\
+5 \quad\, for $i \leftarrow k$ to $n - k - 1$\\
+6 \quad\,\quad do if $A[i] > A[i + 1]$\\
+7 \quad\,\quad\,\quad then $t \leftarrow A[i]$\\
+8 \quad\,\quad\,\quad\, $A[i] \leftarrow A[i + 1]$\\
+9 \quad\,\quad\,\quad\, $A[i + 1] \leftarrow t$\\
+10\quad\,\quad\,\quad\, $F \leftarrow 1$\\
+11\quad\, for $i \leftarrow n - k - 1$ to $k$\\
+12\quad\,\quad do if $A[i] > A[i + 1]$\\
+13\quad\,\quad\,\quad then $t \leftarrow A[i]$\\
+14\quad\,\quad\,\quad\, $A[i] \leftarrow A[i + 1]$\\
+15\quad\,\quad\,\quad\, $A[i + 1] \leftarrow t$\\
+16\quad\,\quad\,\quad\, $F \leftarrow 1$\\
+17 end\\
+
+Псевдокод алгоритма сортировки двустороннего выбора (минимум/максимум):\\
+1 for $k \leftarrow 1$ to $\frac{n}{2}$\\
+2 \quad do $mini \leftarrow k$\\
+3 \quad\, $maxi \leftarrow n - k$\\
+4 \quad\, $min \leftarrow A[mini]$\\
+5 \quad\, $max \leftarrow A[maxi]$\\
+6 \quad\, for $i \leftarrow k$ to $n - k$\\
+7 \quad\,\quad do if $A[i] > max$\\
+8 \quad\,\quad\,\quad then $maxi \leftarrow i$\\
+9 \quad\,\quad\,\quad\, $max \leftarrow A[i]$\\
+10\quad\,\quad\, if $A[i] < min$\\
+11\quad\,\quad\,\quad then $mini \leftarrow i$\\
+12\quad\,\quad\,\quad\, $min \leftarrow A[i]$\\
+13\quad\, if $maxi = k$\\
+14\quad\,\quad then $t \leftarrow A[k]$\\
+15\quad\,\quad\, $A[k] \leftarrow A[mini]$\\
+16\quad\,\quad\, $A[mini] \leftarrow a[n - k]$\\
+17\quad\,\quad\, $A[n - k] \leftarrow t$\\
+18\quad\, else if $mini = n - k$\\
+19\quad\,\quad then $t \leftarrow A[n - k]$\\
+20\quad\,\quad\, $A[n - k] \leftarrow A[maxi]$\\
+21\quad\,\quad\, $A[maxi] \leftarrow a[k]$\\
+22\quad\,\quad\, $A[k] \leftarrow t$\\
+23\quad\, else\\
+24\quad\,\quad then $t \leftarrow A[mini]$\\
+25\quad\,\quad\, $A[mini] \leftarrow A[k]$\\
+26\quad\,\quad\, $A[k] \leftarrow t$\\
+27\quad\,\quad then $t \leftarrow A[maxi]$\\
+28\quad\,\quad\, $A[maxi] \leftarrow A[n - k]$\\
+29\quad\,\quad\, $A[n - k] \leftarrow t$\\
+30 end\\
+
+\newpage
+\subsection{Оценка трудоемкости алгоритмов}
+\begin{center}
+\textbf{Модель вычислений}
+\end{center}
+\begin{enumerate}
+\item Объявление переменной/массива/структуры имеет трудоемкость 0;
+\item Арифметические и логические операции имеют трудоемкость 1;
+\item Операции разыменовании и индексации имеют трудоемкость 1;
+\item Условный оператор (без условий внутри) имеет трудоемкость 0;
+\item Оператор цикла for имеет трудоемкость $1 + n * (3 + T)$, где n - это число повторений цикла, T - трудоемкость тела цикла;
+\item Оператор цикла while имеет трудоемкость $1 + n * (1 + T)$;
+\end{enumerate}
+\begin{center}
+\textbf{Функции трудоемкости}
+\end{center}
+1)Сортировка пузырьком:\\
+Лучший случай (массив отсортирован):\\
+\begin{equation}
+F(n) = 5 + 7(n - 1) \sim \Theta(n)
+\end{equation}
+Худший случай (массив отсортирован по убыванию):\\
+\begin{equation}
+F(n) = 12n^2 - 16n + 6 \sim \Theta(n^2)
+\end{equation}
+2)Шейкерная сортировка:\\
+Лучший случай (массив отсортирован):\\
+\begin{equation}
+F(n) = 14n + 8 \sim \Theta(n)
+\end{equation}
+Худший случай (массив отсортирован по убыванию):$\sim \Theta(n^2)$\\
+3)Сортировка двустороннего выбора (сортировка минимум/максимум):\\
+Работа данного алгоритма почти не зависит от значений массива (зависит только кол-во операций внутри каждого подцикла, но кол-во циклов от этого не меняется). Кол-во операций:\\
+\begin{equation}
+F(n) = an^2 + bn + c \sim \Theta(n^2)
+\end{equation}
 
 \newpage
 \subsection{Вывод}
-Аналитически 
+Аналитически были описаны принципы работы 3-х алгоритмов сортировки:
+\begin{itemize}
+\item Сортировка пузырьком;
+\item Шейкерная сортировка;
+\item Сортировка двусторонним выбором; 
+\end{itemize}
+Для лучшего случая самым быстрым алгоритмом является алгоритм сортировки пузырьком. В лучшем случае у сортировки пузырьком и шейкерной сортировки оценки трудоемкости составляют $\Theta(n)$. В худшем случае оценка трудоемкости для всех 3-x алгоритмов сортировок составляет $\Theta(n^2)$. Оценка трудоемкости алгоритма сортировки двусторонним выбором не зависит от значений массива (зависит кол-во операций).
 
 % Конструкторская часть
 
@@ -199,12 +306,12 @@
 \begin{itemize}
 \item Процессор Intel® Core™ i7-7700HQ;
 \item Оперативная память 16 ГБ;
-\item Операционная система - Arch Linux с рабочим окружением Gnome 3.
+\item Операционная система - Arch Linux с рабочим окружением Cinnamon.
 \end{itemize}
 
 \newpage
 \subsection{Примеры работы}
-На Рис. ?, предсавленном ниже, демонстрируется работа приложения. Запуск приложения осуществляется из эмулятора терминала в Arch Linux. Во время работы приложение запрашивает у пользователя параметры массива и выводит результаты сортировки на экран.
+На Рис. \ref{images:example}, предсавленном ниже, демонстрируется работа приложения. Запуск приложения осуществляется из эмулятора терминала в Arch Linux. Во время работы приложение запрашивает у пользователя параметры массива и выводит результаты сортировки на экран.
 \begin{figure}[h]
 \center{\includegraphics[scale=0.5]{example.png}}
 \caption{Пример работы приложения}

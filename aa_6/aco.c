@@ -79,7 +79,38 @@ error_t free_ants(way_t ***ants, int ant_count)
 	return SUCCESS;
 }
 
-// вероятность перехода муравья ant в вершину to
+static error_t fill_pheromones_and_distances_default(double **pheromone_matrix, double **distance_matrix, double **main_distance_matrix, int vertex_count)
+{
+	if (!pheromone_matrix || !distance_matrix || !main_distance_matrix || !vertex_count)
+		return ERROR_INPUT;
+	for (int i = 0; i < vertex_count; ++i)
+	{
+		for (int j = 0; j < vertex_count; ++j)
+		{
+			pheromone_matrix[i][j] = 1.0 / vertex_count;
+			if (i != j)
+			   	distance_matrix[i][j] = 1.0 / main_distance_matrix[i][j];
+		}
+	}
+	return SUCCESS;
+}
+
+static error_t update_pheromones(double **pheromone_matrix, int vertex_count)
+{
+	if (!pheromone_matrix || !vertex_count)
+		return ERROR_INPUT;
+	for (int i = 0; i < vertex_count; ++i)
+	{
+		for (int j = 0; j < vertex_count; ++j)
+		{
+			if (i != j)
+				pheromone_matrix[i][j] *= (1 - RHO);
+		}
+	}
+	return SUCCESS;
+}
+
+// вероятность перехода муравья ant в вершину to//TODO: Переделай эту тупую парашу
 static double find_probability (int to, way_t *ant, double **pheromone_matrix, double **distance_matrix, int vertex_count)
 {
 	// если вершина уже посещена, возвращаем 0
@@ -106,20 +137,14 @@ static double find_probability (int to, way_t *ant, double **pheromone_matrix, d
 }
  
 // основная функция алгоритма поиска
-way_t *ant_colony_optimize(double **main_distance_matrix, double **distance_matrix, double **pheromone_matrix, 
+error_t ant_colony_optimize(double **main_distance_matrix, double **distance_matrix, double **pheromone_matrix, 
 						   way_t **ants, int ant_count, int vertex_count, int start, int finish, way_t *way)
 {
+	if (!main_distance_matrix || !distance_matrix || !pheromone_matrix || !ants || !ant_count || !vertex_count || !start || !finish || !way)
+		return ERROR_INPUT;
 	// инициализация данных о расстоянии и количестве феромона
-	for (int i = 0; i < vertex_count; ++i) 
-	{
-		for (int j = 0; j < vertex_count; ++j)
-		{
-			pheromone_matrix[i][j] = 1.0 / vertex_count;
-			if (i != j)
-			   	distance_matrix[i][j] = 1.0 / main_distance_matrix[i][j];
-		}
-	}
- 
+	fill_pheromones_and_distances_default(pheromone_matrix, distance_matrix, main_distance_matrix, vertex_count);
+
 	// основной цикл
 	for (int t = 0; t < T_MAX; ++t)
    	{
@@ -131,7 +156,8 @@ way_t *ant_colony_optimize(double **main_distance_matrix, double **distance_matr
 			{
 				int j_max = -1;
 				double p_max = 0.0;
-				for (int j = 0; j < vertex_count; j++) {
+				for (int j = 0; j < vertex_count; j++) 
+				{
 					// Проверка вероятности перехода в вершину j
 					if (ants[k]->tabu[ants[k]->tabu_count - 1] != j)
 				   	{
@@ -146,7 +172,8 @@ way_t *ant_colony_optimize(double **main_distance_matrix, double **distance_matr
 				ants[k]->length += main_distance_matrix[ants[k]->tabu[ants[k]->tabu_count - 1]][j_max];
 				ants[k]->tabu[ants[k]->tabu_count++] = j_max;
 			}
-		   	while (ants[k]->tabu[ants[k]->tabu_count - 1] != finish);
+		   	while (ants[k]->tabu[ants[k]->tabu_count - 1] != finish);//Это конец do
+
 			// оставляем феромон на пути муравья
 			for (int i = 0; i < ants[k]->tabu_count - 1; ++i)
 		   	{
@@ -168,15 +195,7 @@ way_t *ant_colony_optimize(double **main_distance_matrix, double **distance_matr
 			ants[k]->length = 0.0;
 		}
 		// цикл по ребрам
-		for (int i = 0; i < vertex_count; ++i)
-		{
-			for (int j = 0; j < vertex_count; ++j)
-			{
-				// обновление феромона для ребра (i, j)
-				if (i != j)
-				   	pheromone_matrix[i][j] *= (1 - RHO);
-			}
-		}
+		update_pheromones(pheromones_matrix, vertex_count);
 	}
 	// возвращаем кратчайший маршрут
 	

@@ -1,6 +1,7 @@
 /* Муравьиный алгоритм для решения задачи коммивояжёра */
 
 #include "aco.h"
+#include "func_memory.h"
 #include "io.h"
 #include <stdlib.h>
 #include <stdio.h>

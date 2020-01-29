@@ -1,76 +1,69 @@
-#include "notaco.h"
+#include "func_memory.h"
 #include "list.h"
+#include "notaco.h"
+#include "way.h"
+#include <stdlib.h>
 
-static double **distance_matrixg = NULL;
-static int vertice_countg = 0, finishg = 0, current_lengthg = 0, min_lengthg = 0, current_delta = 0;
-static list_t *prohibited_verticesg = NULL, *previous_verticesg = NULL, *current_verticesg = NULL;
+way_t *minimal_wayg = NULL, *current_wayg = NULL;
+double **distance_matrixg = NULL;
+int vertices_countg = 0, countg = 0;
 
-static void find_the_way(int start)
+static void find_the_wayg(int start)
 {
-	for (int i = 0; i < vertice_countg; i++)
+	add_element_to_list(&(current_wayg->list), start);
+	countg++;
+	char flag = 0;
+	double delta = 0;
+	for (int i = 0; i < vertices_countg; i++)
 	{
-		if (distance_matrixg[start][j] >= 0)
+		if (i == start)
+			continue;
+		if (distance_matrixg[start][i] >= 0)
 		{
-			if (i == finishg)
+			if (!in_list(current_wayg->list, i))
 			{
-				if (min_lengthg > current_lengthg || !previous_verticesg)
-				{
-					delete_list(&previous_verticesg);
-					previous_verticesg = current_verticesg;
-					current_verticesg = NULL;
-					min_lengthg = current_lengthg;
-					current_lengthg = 0;
-				}
-				return;
-			}
-			if (!in_list(current_verticesg, i) && !in_list(prohibited_verticesg, i))
-			{
-				add_to_list(&current_verticesg, i);
-				current_delta = distance_matrixg[start][i]
-				current_lengthg += current_delta;
-				find_the_way(i);
+				delta = distance_matrixg[start][i];
+				current_wayg->length += delta;
+				find_the_wayg(i);
+				flag = 1;
 			}
 		}
 	}
-	remove_last_from_list(&current_verticesg);
-	if (current_length != 0)
-		current_length -= current_delta;
+	if (countg == vertices_countg && distance_matrixg[start][current_wayg->start_vertice] >= 0)
+	{
+		current_wayg->length += distance_matrixg[start][current_wayg->start_vertice];
+		if (current_wayg->length < minimal_wayg->length || !(minimal_wayg->list))
+		{
+			delete_list(&(minimal_wayg->list));
+			copy_list(current_wayg->list, &(minimal_wayg->list));
+			minimal_wayg->length = current_wayg->length;
+		}
+	}
+	remove_last_from_list(&(current_wayg->list));
+	countg--;
+	if (flag)
+		current_wayg->length -= delta;
 }
 
-error_t find_the_way_brute_force(double **distance_matrix, int vertice_count, int start, int finish, list_t **way)
+error_t find_commivoyager_way_brute_force(double **distance_matrix, int vertices_count, way_t *result)
 {
-	if (!main_distance_matrix || start >= vertice_count || finish >= vertice_count || !way)
+	if (!distance_matrix || !vertices_count || !result)
 		return ERROR_INPUT;
 	distance_matrixg = distance_matrix;
-	vertice_countg = vertice_count;
-	prohibited_verticesg = NULL;
-	previous_verticesg = NULL;
-	current_verticesg = NULL;
-	current_lengthg = 0;
-	min_length = 0;
-	current_delta = 0;
-	finishg = finish;
+	vertices_countg = vertices_count;
+	initialize_way(&minimal_wayg);
+	initialize_way(&current_wayg);
+	countg = 0;
+	current_wayg->start_vertice = 0;
 
-	add_element_to_list(&current_verticesg, start);
-	find_the_way(start);
-	if (!previous_verticesg)
-	{
-		delete_list(&current_verticesg);
-		*way = NULL;
-		return SUCCESS;
-	}
+	find_the_wayg(0);
+	result->list = minimal_wayg->list;
+	result->length = minimal_wayg->length;
+	minimal_wayg->list = NULL;
 
-	prohibited_verticesg = previous_verticesg;
-	previous_verticesg = NULL;
-	current_verticesg = NULL;
-	current_lengthg = 0;
-	min_length = 0;
-	current_delta = 0;
-	finishg = start;
-
-	add_element_to_list(&current_verticesg, finish);
-	find_the_way(finish);
-	merge_lists(&prohibited_vertices, &previous_verticesg, way);
-	delete_list(&current_verticesg);
+	free_way(&minimal_wayg);
+	free_way(&current_wayg);
+	vertices_countg = 0;
+	distance_matrixg = NULL;
 	return SUCCESS;
 }

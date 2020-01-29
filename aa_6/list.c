@@ -44,7 +44,7 @@ error_t remove_last_from_list(list_t **head)
 	{
 		list_t *tmp = (*head)->previous;
 		(*head)->previous = tmp->previous;
-		tmp->previos->next = (*head);
+		tmp->previous->next = (*head);
 		free(tmp);
 	}
 	return SUCCESS;
@@ -73,6 +73,27 @@ error_t merge_lists(list_t **head1, list_t **head2, list_t **head_result)
 	}
 	*head1 = NULL;
 	*head2 = NULL;
+	return SUCCESS;
+}
+
+error_t copy_list(list_t *source, list_t **destination)
+{
+	if (!destination)
+		return ERROR_INPUT;
+	if (!source)
+	{
+		*destination = NULL;
+	}
+	else
+	{
+		list_t *current = source;
+		do
+		{
+			add_element_to_list(destination, current->num);
+			current = current->next;
+		}
+		while (current != source);
+	}
 	return SUCCESS;
 }
 

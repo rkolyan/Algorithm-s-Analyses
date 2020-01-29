@@ -1,46 +1,58 @@
-/* Муравьиный алгоритм для решения задачи коммивояжёра */
-
 #include "aco.h"
+#include "notaco.h"
 #include "func_memory.h"
 #include "io.h"
-#include <stdlib.h>
+#include "parameters.h"
 #include <stdio.h>
 
-int main (void) 
+int main(int argument_count, char **arguments) 
 {
-	way_t *way = NULL;
-	way_t **ants = NULL;
-	double **main_distance_matrix = NULL, **pheromone_matrix = NULL, **distance_matrix = NULL;
-	int N = 0, A = 0, B = 0;
-	
-	// Инициализация матрицы расстояний
-	write_size_of_matrix(&N);
-	initialize_way(&way, N);
-	initialize_matrix(&main_distance_matrix, N);
-	write_into_matrix(main_distance_matrix, N, N);
-	
-	// Инициализация начальной и конечной точек
-	write_first_and_last_vertice(&A, &B, N);
+	FILE *file = NULL;
+	way_t *way1 = NULL, *way2 = NULL;
+	way_t *ants = NULL;
+	double **distance_matrix = NULL, **pheromone_matrix = NULL, **attraction_matrix = NULL;
+	int vertice_count = 0, ant_count = 0;
+	parameters_t parameters;
 
-	// Инициализируем все необходимые для алгоритма ресурсы
-	initialize_matrix(&pheromone_matrix, N);
-	initialize_matrix(&distance_matrix, N);
-	initialize_ants(&ants, M, N, A);
+	if (argument_count != 2)
+	{
+		printf("Неккоректный ввод\nВведите ./app.exe FILENAME\nFILENAME - имя входного файла с матрицей\n");
+		return 0;
+	}
+	file = fopen(arguments[1], "r");
+	if (!file)
+	{
+		printf("Нет такого файла!\n");
+		return 0;
+	}
+	input_matrix_from_file(&distance_matrix, &vertice_count, file);
+	fclose(file);
+	input_parameters(&parameters);
 
-	// Запускаем алгоритм
-	ant_colony_optimize(main_distance_matrix, distance_matrix, pheromone_matrix, ants, M, N, A - 1, B - 1, way);
-	
+	//Инициализируем все ресурсы
+	initialize_way(&way1);
+	initialize_way(&way2);
+	initialize_matrix(&pheromone_matrix, vertice_count);
+	initialize_matrix(&attraction_matrix, vertice_count);
+	initialize_ants(&ants, ant_count, 0);
+
+	//Ищем пути различными способами
+	find_commivoyager_way_brute_force(distance_matrix, vertice_count, way1);
+	find_commivoyager_way_aco(distance_matrix, pheromone_matrix, attraction_matrix, vertice_count, ants, ant_count, &parameters, way2);
+
 	// Освобождаем все ненужные ресурсы
-	free_ants(&ants, M);
-	free_matrix(&distance_matrix);
+	free_ants(&ants, ant_count);
+	free_matrix(&attraction_matrix);
 	free_matrix(&pheromone_matrix);
-	free_matrix(&main_distance_matrix);
+	free_matrix(&distance_matrix);
  
 	// Выводим результат (Длина пути и сам путь)
-	print_way(way);
+	print_way(way1);
+	print_way(way2);
 
 	// Освобождаем все оставшиеся ресурсы
-	free_way(&way);
+	free_way(&way1);
+	free_way(&way2);
 
 	return 0;
 }

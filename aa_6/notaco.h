@@ -2,8 +2,8 @@
 #define NOTACO_H
 
 #include "error_codes.h"
-#include "list.h"
+#include "way.h"
 
-error_t find_the_way_brute_force(double **main_distance_matrix, int start, int finish, list_t **way);
+error_t find_commivoyager_way_brute_force(double **distance_matrix, int vertices_count, way_t *result);
 
 #endif

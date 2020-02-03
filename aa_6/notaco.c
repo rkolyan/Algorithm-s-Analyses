@@ -50,13 +50,12 @@ error_t find_commivoyager_way_brute_force(double **distance_matrix, int vertices
 	initialize_way(&minimal_wayg);
 	initialize_way(&current_wayg);
 	countg = 0;
-	current_wayg->start_vertice = 0;
 
 	find_the_wayg(0);
+
 	result->list = minimal_wayg->list;
 	result->length = minimal_wayg->length;
 	minimal_wayg->list = NULL;
-
 	free_way(&minimal_wayg);
 	free_way(&current_wayg);
 	vertices_countg = 0;

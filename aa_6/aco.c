@@ -73,6 +73,7 @@ error_t update_pheromones_for_path(double **pheromone_matrix, list_t *head, way_
 	{
 		pheromone_matrix[current->num][current->next->num] = parameters->Q / ant->length;
 		pheromone_matrix[current->next->num][current->num] = pheromone_matrix[current->num][current->next->num];
+		current = current->next;
 	}
 	while (current->next != head);
 	return SUCCESS;
@@ -135,7 +136,7 @@ error_t find_commivoyager_way_aco(double **distance_matrix, double **pheromone_m
 			add_finish_start(ants + j, distance_matrix, &next);
 			if (next == -1)
 			{
-				set_new_ant_info(ants + j, 0);
+				set_new_ant_info(ants + j, 0);//Удаляется список
 				continue;
 			}
 			update_pheromones_for_path(pheromone_matrix, ants[j].list, ants, parameters);//TODO:Обновлять феромон, если муравей зашел в тупик, или нет?
@@ -145,7 +146,7 @@ error_t find_commivoyager_way_aco(double **distance_matrix, double **pheromone_m
 				copy_list(ants[j].list, &(way->list));
 				way->length = ants[j].length;
 			}
-			set_new_ant_info(ants + j, 0);
+			set_new_ant_info(ants + j, 0);//Удаляется список
 		}
 		update_pheromones(pheromone_matrix, vertices_count, parameters);
 	}

@@ -7,7 +7,7 @@ typedef struct
 	double beta;
 	double Q;
 	double rho;
-	double time;
+	int time;
 } parameters_t;
 
 #endif

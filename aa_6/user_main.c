@@ -11,7 +11,7 @@ int main(int argument_count, char **arguments)
 	way_t *way1 = NULL, *way2 = NULL;
 	way_t *ants = NULL;
 	double **distance_matrix = NULL, **pheromone_matrix = NULL, **attraction_matrix = NULL;
-	int vertice_count = 0, ant_count = 0;
+	int vertice_count = 0, ant_count = 20;
 	parameters_t parameters;
 
 	if (argument_count != 2)
@@ -28,6 +28,7 @@ int main(int argument_count, char **arguments)
 	input_matrix_from_file(&distance_matrix, &vertice_count, file);
 	fclose(file);
 	input_parameters(&parameters);
+	//TODO: Ввод кол-во муравьев
 
 	//Инициализируем все ресурсы
 	initialize_way(&way1);

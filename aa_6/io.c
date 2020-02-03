@@ -63,5 +63,7 @@ error_t input_parameters(parameters_t *parameters)
 	scanf("%lf", &(parameters->Q));
 	printf("Введите коэффициент испарения rho:");
 	scanf("%lf", &(parameters->rho));
+	printf("Введите время жизни колонии (кол-во циклов, целое число):");
+	scanf("%d", &(parameters->time));
 	return SUCCESS;
 }

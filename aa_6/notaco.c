@@ -12,8 +12,6 @@ static void find_the_wayg(int start)
 {
 	add_element_to_list(&(current_wayg->list), start);
 	countg++;
-	char flag = 0;
-	double delta = 0;
 	for (int i = 0; i < vertices_countg; i++)
 	{
 		if (i == start)
@@ -22,10 +20,9 @@ static void find_the_wayg(int start)
 		{
 			if (!in_list(current_wayg->list, i))
 			{
-				delta = distance_matrixg[start][i];
-				current_wayg->length += delta;
+				current_wayg->length += distance_matrixg[start][i];
 				find_the_wayg(i);
-				flag = 1;
+				current_wayg->length -= distance_matrixg[start][i];
 			}
 		}
 	}
@@ -38,11 +35,10 @@ static void find_the_wayg(int start)
 			copy_list(current_wayg->list, &(minimal_wayg->list));
 			minimal_wayg->length = current_wayg->length;
 		}
+		current_wayg->length -= distance_matrixg[start][current_wayg->start_vertice];
 	}
 	remove_last_from_list(&(current_wayg->list));
 	countg--;
-	if (flag)
-		current_wayg->length -= delta;
 }
 
 error_t find_commivoyager_way_brute_force(double **distance_matrix, int vertices_count, way_t *result)

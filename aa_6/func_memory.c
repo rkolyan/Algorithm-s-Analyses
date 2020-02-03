@@ -54,7 +54,7 @@ error_t initialize_way(way_t **way)
 	if (!way)
 		return ERROR_INPUT;
 	*way = malloc(sizeof(way_t));
-	(*way)->start_vertice = -1;
+	(*way)->start_vertice = 0;//TODO:0 или -1
 	(*way)->length = 0;
 	(*way)->list = NULL;
 	return SUCCESS;

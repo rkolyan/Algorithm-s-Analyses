@@ -35,7 +35,7 @@ int main(int argument_count, char **arguments)
 	initialize_way(&way2);
 	initialize_matrix(&pheromone_matrix, vertice_count);
 	initialize_matrix(&attraction_matrix, vertice_count);
-	initialize_ants(&ants, ant_count, 0);
+	initialize_ants(&ants, ant_count);
 
 	//Ищем пути различными способами
 	find_commivoyager_way_brute_force(distance_matrix, vertice_count, way1);

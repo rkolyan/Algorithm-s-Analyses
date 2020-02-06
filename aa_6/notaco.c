@@ -10,7 +10,7 @@ int vertices_countg = 0, countg = 0;
 
 static void find_the_wayg(int start)
 {
-	add_element_to_list(&(current_wayg->list), start);
+	add_node_to_way(current_wayg, start);
 	countg++;
 	for (int i = 0; i < vertices_countg; i++)
 	{
@@ -18,7 +18,7 @@ static void find_the_wayg(int start)
 			continue;
 		if (distance_matrixg[start][i] >= 0)
 		{
-			if (!in_list(current_wayg->list, i))
+			if (!in_way(current_wayg, i))
 			{
 				current_wayg->length += distance_matrixg[start][i];
 				find_the_wayg(i);
@@ -26,18 +26,17 @@ static void find_the_wayg(int start)
 			}
 		}
 	}
-	if (countg == vertices_countg && distance_matrixg[start][current_wayg->start_vertice] >= 0)
+	if (countg == vertices_countg && distance_matrixg[start][first_node_from_way(current_wayg)] >= 0)
 	{
-		current_wayg->length += distance_matrixg[start][current_wayg->start_vertice];
-		if (current_wayg->length < minimal_wayg->length || !(minimal_wayg->list))
+		current_wayg->length += distance_matrixg[start][first_node_from_way(current_wayg)];
+		if (is_way_shorter(current_wayg, minimal_wayg))
 		{
-			delete_list(&(minimal_wayg->list));
-			copy_list(current_wayg->list, &(minimal_wayg->list));
-			minimal_wayg->length = current_wayg->length;
+			clear_way(minimal_wayg);
+			copy_way(current_wayg, minimal_wayg);
 		}
-		current_wayg->length -= distance_matrixg[start][current_wayg->start_vertice];
+		current_wayg->length -= distance_matrixg[start][first_node_from_way(current_wayg)];
 	}
-	remove_last_from_list(&(current_wayg->list));
+	remove_last_node_in_way(current_wayg);
 	countg--;
 }
 
@@ -53,9 +52,8 @@ error_t find_commivoyager_way_brute_force(double **distance_matrix, int vertices
 
 	find_the_wayg(0);
 
-	result->list = minimal_wayg->list;
-	result->length = minimal_wayg->length;
-	minimal_wayg->list = NULL;
+	move_way(minimal_wayg, result);
+	clear_way(minimal_wayg);
 	free_way(&minimal_wayg);
 	free_way(&current_wayg);
 	vertices_countg = 0;

@@ -37,7 +37,36 @@ static error_t update_pheromones(double **pheromone_matrix, int vertex_count, pa
 	return SUCCESS;
 }
 
-static error_t choose_way_probably(double **distance_matrix, double **pheromone_matrix, double **attraction_matrix, int vertices_count, int previous, way_t *ant, parameters_t *parameters, int *result)
+error_t update_pheromones_for_path(double **pheromone_matrix, way_t *ant, parameters_t *parameters)//TODO: А что если путь = 0?
+{
+	if (!pheromone_matrix || !ant || !parameters)
+		return ERROR_INPUT;
+	if (!ant->list)
+		return SUCCESS;
+	list_t *current = ant->list;//Пахнет костылями
+	do
+	{
+		pheromone_matrix[current->num][current->next->num] = parameters->Q / ant->length;
+		pheromone_matrix[current->next->num][current->num] = pheromone_matrix[current->num][current->next->num];
+		current = current->next;
+	}
+	while (current->next != ant->list);
+	return SUCCESS;
+}
+
+error_t set_ant_to_random_city(way_t *ants, int ant_count, int vertice_count)
+{
+	if (!ants || ant_count <= 0 || vertice_count <= 0)
+		return ERROR_INPUT;
+	for (int i = 0; i < ant_count; i++)
+	{
+		clear_way(ants + i);
+		add_node_to_way(ants + i, rand() % vertice_count);
+	}
+	return SUCCESS;
+}
+
+static error_t choose_next_node_probably(double **distance_matrix, double **pheromone_matrix, double **attraction_matrix, int vertices_count, int previous, way_t *ant, parameters_t *parameters, int *result)
 {
 	if (!distance_matrix || !pheromone_matrix || !attraction_matrix || vertices_count <= 0 || !ant)
 		return ERROR_INPUT;
@@ -46,13 +75,13 @@ static error_t choose_way_probably(double **distance_matrix, double **pheromone_
 
 	for (int i = 0; i < vertices_count; i++)
 	{
-		if (distance_matrix[previous][i] >= 0 && !in_list(ant->list, i))
+		if (distance_matrix[previous][i] >= 0 && !in_way(ant, i))
 			sum1 += pow(pheromone_matrix[previous][i], parameters->alpha) * pow(attraction_matrix[previous][i], parameters->beta);
 	}
 
 	for (int i = 0; i < vertices_count; i++)
 	{
-		if (distance_matrix[previous][i] >= 0 && !in_list(ant->list, i))
+		if (distance_matrix[previous][i] >= 0 && !in_way(ant, i))
 		{
 			sum1 += pow(pheromone_matrix[previous][i], parameters->alpha) * pow(attraction_matrix[previous][i], parameters->beta);
 			if (sum1 / sum2 >= current_probability)
@@ -66,24 +95,30 @@ static error_t choose_way_probably(double **distance_matrix, double **pheromone_
 	return SUCCESS;
 }
 
-/*
-error_t update_pheromones_for_path(double **pheromone_matrix, list_t *head, way_t *ant, parameters_t *parameters)
+error_t build_path_for_ant(way_t *ant, double **distance_matrix, double **pheromone_matrix, double **attraction_matrix, int vertices_count, parameters_t *parameters)
 {
-	if (!pheromone_matrix || !head || !ant || !parameters)
+	if (!ant || !distance_matrix || !pheromone_matrix || !attraction_matrix || vertices_count <= 0 || !parameters)
 		return ERROR_INPUT;
-	list_t *current = head;
-	do
+	int current = first_node_from_way(ant);
+	int next = 0, count = 0;
+
+	while (next != -1 && count != vertices_count - 1)
 	{
-		pheromone_matrix[current->num][current->next->num] = parameters->Q / ant->length;
-		pheromone_matrix[current->next->num][current->num] = pheromone_matrix[current->num][current->next->num];
-		current = current->next;
+		choose_next_node_probably(distance_matrix, pheromone_matrix, attraction_matrix, vertices_count, current, ant, parameters, &next);
+		if (next == -1)
+			break;
+		ant->length += distance_matrix[current][next];
+		add_node_to_way(ant, next);
+		current = next;
+		count++;
 	}
-	while (current->next != head);
+	//TODO: Что, если зашел в тупик?
+	ant->length += distance_matrix[current][first_node_from_way(ant)];
+
 	return SUCCESS;
 }
-*/
 
-error_t find_commivoyager_way_aco(double **distance_matrix, double **pheromone_matrix, double **attraction_matrix, int vertices_count, way_t *ants, int ant_count, parameters_t *parameters, way_t *way)//По идее должен работать и для ориентированных графов
+error_t find_commivoyager_way_aco(double **distance_matrix, double **pheromone_matrix, double **attraction_matrix, int vertices_count, way_t *ants, int ant_count, parameters_t *parameters, way_t *result_way)//По идее должен работать и для ориентированных графов
 {
 	if (!distance_matrix || !pheromone_matrix || !attraction_matrix || vertices_count <= 0 || !ants || ant_count <= 0)
 		return ERROR_INPUT;
@@ -91,9 +126,20 @@ error_t find_commivoyager_way_aco(double **distance_matrix, double **pheromone_m
 	for (int i = 0; i < parameters->time; i++)
 	{
 		//1)Установить муравьев в случайные города
+		set_ant_to_random_city(ants, ant_count, vertices_count);
 		for (int j = 0; j < ant_count; j++)
 		{
 			//2)Сформировать маршрут для отдельного муравья
+			build_path_for_ant(ants + j, distance_matrix, pheromone_matrix, attraction_matrix, vertices_count, parameters);
+			//3)Сравнить с кратчайшим, если меньше, то обновить путь
+			if (is_way_shorter(ants, result_way))
+			{
+				clear_way(result_way);
+				copy_way(ants + j, result_way);
+			}
+			//TODO: Нужно ещё проверить, не зашел ли муравей в тупик, и, в зависимости от этого решить, обновлять феромон или нет
+			clear_way(ants + j);
+			update_pheromones_for_path(pheromone_matrix, ants + j, parameters);
 		}
 		update_pheromones(pheromone_matrix, vertices_count, parameters);
 	}

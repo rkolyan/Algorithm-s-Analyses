@@ -22,15 +22,14 @@ error_t free_matrix(double ***matrix)
 	return SUCCESS;
 }
 
-error_t initialize_ants(way_t **ants, int ant_count, int start)
+error_t initialize_ants(way_t **ants, int ant_count)
 {
-	if (!ants || ant_count <= 0 || start < 0)
+	if (!ants || ant_count <= 0)
 		return ERROR_INPUT;
 	way_t *new_ants = NULL;
 	new_ants = malloc(sizeof(way_t) * ant_count);
 	for (int i = 0; i < ant_count; i++)
 	{
-		new_ants[i].start_vertice = start;
 		new_ants[i].list = NULL;
 		new_ants[i].length = 0;
 	}
@@ -54,7 +53,6 @@ error_t initialize_way(way_t **way)
 	if (!way)
 		return ERROR_INPUT;
 	*way = malloc(sizeof(way_t));
-	(*way)->start_vertice = 0;//TODO:0 или -1
 	(*way)->length = 0;
 	(*way)->list = NULL;
 	return SUCCESS;

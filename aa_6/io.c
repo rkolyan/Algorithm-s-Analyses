@@ -51,19 +51,55 @@ error_t input_matrix_from_file(double ***matrix, int *count, FILE *file)
 	return SUCCESS;
 }
 
+error_t input_integer(int *number, const char *name, char is_positive)
+{
+	if (!number || !name)
+		return ERROR_INPUT;
+	while (1)
+	{
+		printf("Введите %s (целое число):", name);
+		if (scanf("%d", number) == 0)
+		{
+			puts("Вы ввели не целое число!");
+			continue;
+		}
+		if (*number <= 0 && is_positive)
+			puts("Вводимое число дожно быть положительным!");
+		else
+			break;
+	}
+	return SUCCESS;
+}
+
+error_t input_float(double *number, const char *name, char is_positive)
+{
+	if (!number || !name)
+		return ERROR_INPUT;
+	while (1)
+	{
+		printf("Введите %s (число):", name);
+		if (scanf("%lf", number) == 0)
+		{
+			puts("Вы ввели не число!");
+			continue;
+		}
+		if (*number <= 0 && is_positive)
+			puts("Вводимое число дожно быть положительным!");
+		else
+			break;
+	}
+	return SUCCESS;
+}
+
+#define IS_POSITIVE 1
 error_t input_parameters(parameters_t *parameters)
 {
 	if (!parameters)
 		return ERROR_INPUT;
-	printf("Введите коэффициент alpha:");
-	scanf("%lf", &(parameters->alpha));
-	printf("Введите коэффициент beta:");
-	scanf("%lf", &(parameters->beta));
-	printf("Введите коэффициент Q:");
-	scanf("%lf", &(parameters->Q));
-	printf("Введите коэффициент испарения rho:");
-	scanf("%lf", &(parameters->rho));
-	printf("Введите время жизни колонии (кол-во циклов, целое число):");
-	scanf("%d", &(parameters->time));
+	input_float(&(parameters->alpha), "alpha", IS_POSITIVE);
+	input_float(&(parameters->beta), "beta", IS_POSITIVE);
+	input_float(&(parameters->Q), "Q", IS_POSITIVE);
+	input_float(&(parameters->rho), "коэффициент испарения rho", IS_POSITIVE);
+	input_integer(&(parameters->time), "время жизни колонии", 1);
 	return SUCCESS;
 }

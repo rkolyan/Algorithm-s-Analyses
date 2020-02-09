@@ -3,7 +3,10 @@
 #include "func_memory.h"
 #include "io.h"
 #include "parameters.h"
+
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 int main(int argument_count, char **arguments) 
 {
@@ -28,7 +31,7 @@ int main(int argument_count, char **arguments)
 	input_matrix_from_file(&distance_matrix, &vertice_count, file);
 	fclose(file);
 	input_parameters(&parameters);
-	//TODO: Ввод кол-во муравьев
+	input_integer(&ant_count, "количество муравьев", 1);
 
 	//Инициализируем все ресурсы
 	initialize_way(&way1);
@@ -37,9 +40,14 @@ int main(int argument_count, char **arguments)
 	initialize_matrix(&attraction_matrix, vertice_count);
 	initialize_ants(&ants, ant_count);
 
+	srand(time(NULL));
+
 	//Ищем пути различными способами
-	find_commivoyager_way_brute_force(distance_matrix, vertice_count, way1);
 	find_commivoyager_way_aco(distance_matrix, pheromone_matrix, attraction_matrix, vertice_count, ants, ant_count, &parameters, way2);
+	print_way(way2);
+
+	find_commivoyager_way_brute_force(distance_matrix, vertice_count, way1);
+	print_way(way1);
 
 	// Освобождаем все ненужные ресурсы
 	free_ants(&ants, ant_count);
@@ -47,10 +55,6 @@ int main(int argument_count, char **arguments)
 	free_matrix(&pheromone_matrix);
 	free_matrix(&distance_matrix);
  
-	// Выводим результат (Длина пути и сам путь)
-	print_way(way1);
-	print_way(way2);
-
 	// Освобождаем все оставшиеся ресурсы
 	free_way(&way1);
 	free_way(&way2);

@@ -43,9 +43,11 @@ int main(int argument_count, char **arguments)
 	srand(time(NULL));
 
 	//Ищем пути различными способами
+	puts("Результат работы муравьиного алгоритма:");
 	find_commivoyager_way_aco(distance_matrix, pheromone_matrix, attraction_matrix, vertice_count, ants, ant_count, &parameters, way2);
 	print_way(way2);
 
+	puts("Результат работы алгоритма использующий полный перебор:");
 	find_commivoyager_way_brute_force(distance_matrix, vertice_count, way1);
 	print_way(way1);
 

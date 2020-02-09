@@ -1,22 +1,14 @@
 #ifndef IO_H
 #define IO_H
 
-#include "aco.h"
-#include "error_codes.h"
+#include <stdio.h>
+#include "parameters.h"
+#include "way.h"
 
-//Function for correct input matrix parameters
-void write_size_of_matrix(int *row);
-//Function for correct vertice parameters input
-void write_first_and_last_vertice(int *vertex_number1, int *vertex_number2, int maximum);
-//Function for correct input aco parameter
-void write_aco_coefficient(const char *type, const char *name, void *res);
-//Function for detecting errors in strings
-error_t write_into_string(double *pointer, int count);
-//Function for input numbers into matrix
-void write_into_matrix(double **matr, int row, int col);
-//Beatiful print way
-void print_way(way_t * way);
-
-#define SBUF 150
+error_t print_way(way_t *way);
+error_t input_matrix_from_file(double ***matrix, int *count, FILE *file);
+error_t input_parameters(parameters_t *parameters);
+error_t input_integer(int *number, const char *name, char is_positive);
+error_t input_float(double *number, const char *name, char is_positive);
 
 #endif

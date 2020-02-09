@@ -15,6 +15,7 @@ void find_calculations(int count1, int count2, function_t *functions, const char
 	file = fopen(filename, "w");
 	for (int i = 1; i <= count1; i++)
 	{
+		clocks = 0;
 		for (int j = 0; j < count2; j++)
 		{
 			s1 = create_random_word_with_size(i);

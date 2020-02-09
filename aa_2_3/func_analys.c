@@ -19,6 +19,7 @@ void find_calculations(int count1, int count2, function_t *functions, const char
 		create_matrix(i + (some + 1) % 2, i + (some + 1) % 2, &matrix1);
 		create_matrix(i + (some + 1) % 2, i + (some + 1) % 2, &matrix2);
 		create_matrix(i + (some + 1) % 2, i + (some + 1) % 2, &matrix_result);
+		clocks = 0;
 		for (int j = 0; j < count2; j++)
 		{
 			fill_random_matrix_with_size(i, i, matrix1);

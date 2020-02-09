@@ -17,6 +17,7 @@ void find_calculations(int count1, int count2, function_p function, error_t (*fi
 	array = malloc(sizeof(type_t) * count1);
 	for (int i = 1; i <= count1; i++)
 	{
+		clocks = 0;
 		for (int j = 0; j < count2; j++)
 		{
 			fill_array(array, i);

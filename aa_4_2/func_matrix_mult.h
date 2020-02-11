@@ -13,11 +13,8 @@ typedef struct
 	double *col_factor;
 	int i1;
 	int i2;
-	int j1;
-	int j2;
 	int col_count1;
 	int col_count2;
-	int row_count2;
 	int d;
 } function_resourse_t;
 

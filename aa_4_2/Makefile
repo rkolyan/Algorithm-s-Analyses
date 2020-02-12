@@ -8,5 +8,8 @@ user.exe: user_main.o io.o func_matrix_creation.o func_matrix_mult.o
 exp.exe: exp_main.o func_matrix_creation.o func_matrix_mult.o func_matrix_mult2.o
 	$(CC) -o $@ $^
 
+%.o: %.c
+	$(CC) -c $^
+
 clean:
 	rm *.o *.exe

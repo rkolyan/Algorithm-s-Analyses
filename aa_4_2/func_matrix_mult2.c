@@ -1,7 +1,7 @@
-void standard_multiply_matrix2(double **matrix1, double **matrix2, 
-		int row_count1, int col_count1, int row_count2, int col_count2, double **matrix_result)
+void standard_multiply_matrix2(int **matrix1, int **matrix2, 
+		int row_count1, int col_count1, int row_count2, int col_count2, int **matrix_result)
 {
-	double sum = 0;
+	int sum = 0;
 	for (int i = 0; i < row_count1; i++)
 	{
 		for (int j = 0; j < col_count2; j++)
@@ -14,8 +14,8 @@ void standard_multiply_matrix2(double **matrix1, double **matrix2,
 	}
 }
 
-void vinograd_multiply_matrix2(double **matrix1, double **matrix2, double *row_factor, double *col_factor,
-		int row_count1, int col_count1, int row_count2, int col_count2, double **matrix_result)
+void vinograd_multiply_matrix2(int **matrix1, int **matrix2, int *row_factor, int *col_factor,
+		int row_count1, int col_count1, int row_count2, int col_count2, int **matrix_result)
 {
 	int d = col_count1 >> 1;
 

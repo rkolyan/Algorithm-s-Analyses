@@ -13,8 +13,8 @@
 int main(void)
 {
 	time_t timer;
-	double **matrix1 = NULL, **matrix2 = NULL, **matrix_result = NULL;
-	double *row_factor = NULL, *col_factor = NULL;
+	int **matrix1 = NULL, **matrix2 = NULL, **matrix_result = NULL;
+	int *row_factor = NULL, *col_factor = NULL;
 	thrd_t *threads = NULL;
 	function_resourse_t *fr = NULL;
 	create_matrix(MATRIX_SIZE, MATRIX_SIZE, &matrix1);

@@ -5,7 +5,7 @@ static int partly_standard_multiply_matrix(void *args)
 	if(!args)
 		return ERROR_INPUT;
 	function_resourse_t *fr = args;
-	double sum = 0;
+	int sum = 0;
 	for (int i = fr->i1; i < fr->i2; i++)
 	{
 		for (int j = 0; j < fr->col_count2; j++)
@@ -19,9 +19,9 @@ static int partly_standard_multiply_matrix(void *args)
 	return SUCCESS;
 }
 
-error_t standard_multiply_matrix(double **matrix1, double **matrix2, 
+error_t standard_multiply_matrix(int **matrix1, int **matrix2, 
 		int row_count1, int col_count1, int row_count2, int col_count2, 
-		thrd_t *threads, int threads_count, function_resourse_t *fr, double **matrix_result)
+		thrd_t *threads, int threads_count, function_resourse_t *fr, int **matrix_result)
 {
 	if (!matrix1 || !matrix2 || !matrix_result || row_count1 <= 0 || col_count1 <= 0 || row_count2 <= 0 || \
 		       	col_count2 <= 0 || col_count1 != row_count2 || !threads || threads_count <= 0 || !fr)
@@ -59,7 +59,7 @@ static int partly_vinograd_multiply_matrix(void *args)
 	if(!args)
 		return ERROR_INPUT;
 	function_resourse_t *fr = (function_resourse_t *)args;
-	double sum = 0;
+	int sum = 0;
 	for (int i = fr->i1; i < fr->i2; i++)
 	{
 		for (int j = 0; j < fr->col_count2; j++)
@@ -75,15 +75,15 @@ static int partly_vinograd_multiply_matrix(void *args)
 		for (int i = fr->i1; i < fr->i2; i++)
 		{
 			for (int j = 0; j < fr->col_count2; j++)
-				sum += fr->matrix1[i][fr->col_count1 - 1] * fr->matrix2[fr->col_count1 - 1][j];
+				fr->matrix_result[i][j] += fr->matrix1[i][fr->col_count1 - 1] * fr->matrix2[fr->col_count1 - 1][j];
 		}
 	}
 	return SUCCESS;
 }
 
-error_t vinograd_multiply_matrix(double **matrix1, double **matrix2, double *row_factor, double *col_factor,
+error_t vinograd_multiply_matrix(int **matrix1, int **matrix2, int *row_factor, int *col_factor,
 		int row_count1, int col_count1, int row_count2, int col_count2, 
-		thrd_t *threads, int threads_count, function_resourse_t *fr, double **matrix_result)
+		thrd_t *threads, int threads_count, function_resourse_t *fr, int **matrix_result)
 {
 	if (!matrix1 || !matrix2 || !matrix_result || row_count1 <= 0 || col_count1 <= 0 || row_count2 <= 0 || \
 		col_count2 <= 0 || col_count1 != row_count2 || !threads || threads_count <= 0 || !fr)

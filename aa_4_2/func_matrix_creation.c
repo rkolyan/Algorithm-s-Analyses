@@ -49,3 +49,15 @@ error_t create_vinograd_array(double **matrix, int row, int col, char method, do
 	*array = new_array;
 	return SUCCESS;
 }
+
+error_t fill_random_matrix_with_size(double **matrix, int row, int col)
+{
+	if (row <= 0 || col <= 0 || !matrix)
+		return ERROR_INPUT;
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+			matrix[i][j] = ((double)rand()) / 100000;
+	}
+	return SUCCESS;
+}

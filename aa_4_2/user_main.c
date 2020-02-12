@@ -37,6 +37,7 @@ int main(void)
 	fr = malloc(sizeof(function_resourse_t) * threads_count);
 
 	standard_multiply_matrix(matrix1, matrix2, row1, col1, row2, col2, threads, threads_count, fr, matrix_result);
+	puts("Результат работы стандартного алгоритма умножения (многопоточного):");
 	print_matrix(stdout, matrix_result, row1, col2);
 	putchar('\n');
 	
@@ -44,6 +45,7 @@ int main(void)
 	create_vinograd_array(matrix2, row2, col2, 0, &col_factor);
 
 	vinograd_multiply_matrix(matrix1, matrix2, row_factor, col_factor, row1, col1, row2, col2, threads, threads_count, fr, matrix_result);
+	puts("Результат работы алгоритма умножения методом Винограда (многопоточного):");
 	print_matrix(stdout, matrix_result, row1, col2);
 	putchar('\n');
 	

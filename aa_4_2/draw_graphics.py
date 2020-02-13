@@ -14,7 +14,7 @@ def draw_graphic(xarray, yarrays):
     plot.plot(xarray, yarrays[0], label = 'Стандартный алгоритм');
     plot.plot(xarray, yarrays[1], label = 'Алгоритм Винограда');
     plot.legend();
-    plot.title('Время умножения матриц размерностями 100x100');
+    plot.title('Время умножения матриц размерностями 1001x1001');
     plot.ylabel('Реальное время, секунды');
     plot.xlabel('Количество потоков');
     plot.grid(True);
@@ -22,8 +22,8 @@ def draw_graphic(xarray, yarrays):
 
 if __name__ == "__main__":
     yarrays = list();
-    yarrays.append(fill_array_of_results("result100s.txt"));
-    yarrays.append(fill_array_of_results("result100v.txt"));
+    yarrays.append(fill_array_of_results("result1001s.txt"));
+    yarrays.append(fill_array_of_results("result1001v.txt"));
     xarray = [];
     for i in range(1, len(yarrays[0]) + 1):
         xarray.append(i);

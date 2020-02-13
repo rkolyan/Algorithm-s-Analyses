@@ -6,9 +6,9 @@
 #include "func_matrix_creation.h"
 #include "func_matrix_mult.h"
 
-#define MATRIX_SIZE 1000
-#define THREADS_COUNT 32
-#define ITERATIONS_COUNT 20
+#define MATRIX_SIZE 1001
+#define THREADS_COUNT 100
+#define ITERATIONS_COUNT 10
 
 int main(void)
 {

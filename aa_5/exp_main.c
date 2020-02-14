@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <sys/time.h>
 #include <threads.h>
 #include "function_resources.h"
 #include "func_conveyer.h"
@@ -10,7 +10,8 @@
 int main(void)
 {
 	int count2 = 0;
-	clock_t timer, sum;
+	double result = 0;
+	struct timeval timer1, timer2;
 
 	//printf("Введите кол-во элементов, которые будут обслуживаться контейнером:");
 	//scanf("%d", &count1);
@@ -31,9 +32,10 @@ int main(void)
 	threads = calloc(THREADS_COUNT, sizeof (thrd_t));
 	fill_first_queue(all_resources);
 	
+	result = 0;
 	for (int i = 0; i < count2; i++)
 	{
-		timer = clock();
+		gettimeofday(&timer1, NULL);
 		for (int i = 0; i < AUTOMOBILE_COUNT; i++)
 		{
 			remove_from_queue(all_resources, &automobile);
@@ -53,12 +55,11 @@ int main(void)
 			add_to_queue(all_resources + 5, automobile);
 			automobile = NULL;
 		}
-		timer = clock() - timer;
-		sum += timer;
+		gettimeofday(&timer2, NULL);
+		result += (double)(timer2.tv_sec - timer1.tv_sec) + (timer2.tv_usec - timer1.tv_usec) / 1000000.0;
 	}
-	timer = sum / count2;
 
-	printf("1 - %ld\n", timer);
+	printf("linear - %lf\n", result / count2);
 
 	fill_function_resource(function_resources, all_resources, mutexes, conditional_variables, create_body, 1);
 	fill_function_resource(function_resources + 1, all_resources + 1, mutexes, conditional_variables, create_circles, 0);
@@ -72,7 +73,7 @@ int main(void)
 		cnd_init(conditional_variables + i);
 	}
 
-	sum = 0;
+	result = 0;
 
 	for (int i = 0; i < count2; i++)
 	{
@@ -84,20 +85,17 @@ int main(void)
 		(all_resources + THREADS_COUNT)->array = tmp;
 		(all_resources + THREADS_COUNT)->object_counter = 0;
 
-		timer = clock();
+		gettimeofday(&timer1, NULL);
 		thrd_create(threads, begin_first_conveyer, function_resources);
-		thrd_detach(*threads);
 		for (int i = 1; i < THREADS_COUNT - 1; i++)
-		{
 			thrd_create(threads + i, begin_conveyer, function_resources + i);
-			thrd_detach(threads[i]);
-		}
 		thrd_create(threads + THREADS_COUNT - 1, begin_last_conveyer, function_resources + THREADS_COUNT - 1);
 		thrd_join(threads[THREADS_COUNT - 1], NULL);
-		timer = clock() - timer;
-		sum += timer;
+		gettimeofday(&timer2, NULL);
+		result += (double)(timer2.tv_sec - timer1.tv_sec) + (timer2.tv_usec - timer1.tv_usec) / 1000000.0;
 	}
-	timer = sum / count2;
+
+	printf("thread - %lf\n", result / count2);
 
 	for (int i = 0; i < THREADS_COUNT - 1; i++)
 	{
@@ -105,6 +103,5 @@ int main(void)
 		cnd_destroy(conditional_variables + i);
 	}
 
-	printf("2 - %ld\n", timer);
 	return 0;
 }

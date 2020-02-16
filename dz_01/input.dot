@@ -1,0 +1,7 @@
+digraph some
+{
+	a -> b
+	b -> c
+	c -> d
+	c -> a
+}

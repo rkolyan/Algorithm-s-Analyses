@@ -24,15 +24,9 @@ error_t find_control_graph(char **strings, int count, graph_vertice_t *graph)
 		is_needle_in_haystack_usual(strings[i], strlen(strings[i]), "while ", 6, &tmp_result);
 		if (tmp_result >= 0)
 			flag_of_cycle = 1;
-		is_needle_in_haystack_usual(strings[i], strlen(strings[i]), "do ", 3, &tmp_result);
+		is_needle_in_haystack_usual(strings[i], strlen(strings[i]), "do", 3, &tmp_result);
 		if (tmp_result >= 0)
 			flag_of_cycle = 1;
-		is_needle_in_haystack_usual(strings[i], strlen(strings[i]), "else ", 3, &tmp_result);
-		if (tmp_result >= 0)
-			continue;
-		is_needle_in_haystack_usual(strings[i], strlen(strings[i]), "{", 1, &tmp_result);
-		if (tmp_result >= 0)
-			continue;
 		is_needle_in_haystack_usual(strings[i], strlen(strings[i]), "}", 1, &tmp_result);
 		if (tmp_result >= 0)
 			continue;
@@ -44,7 +38,7 @@ error_t find_control_graph(char **strings, int count, graph_vertice_t *graph)
 			connect_cycles(strings + i, count - i, graph + i);
 		else if (flag_of_condition)
 			connect_conditions(strings + i, count - i, graph + i);
-		else if (i < count - 1)
+		if (i < count - 1)
 			connect_graph_from_to(graph + i, graph + i + 1);
 	}
 	return SUCCESS;
@@ -55,10 +49,11 @@ static error_t connect_conditions(char **strings, int count, graph_vertice_t *gr
 	if (!strings || count <= 0 || !graph)
 		return ERROR_INPUT;
 	int tmp_result = 0;
-	if (find_size_of_block(strings + 1, 0, &tmp_result) == ERROR_INCORRECT)
+	if (find_size_of_block(strings, 0, &tmp_result) == ERROR_INCORRECT)
 		return ERROR_INCORRECT;
-	connect_graph_from_to(graph, graph + 1);
-	int counter = tmp_result + 1;
+	//connect_graph_from_to(graph, graph + 1);
+	int counter = tmp_result;
+	connect_graph_from_to(graph, graph + counter);
 	int repeating = 0;
 	while (tmp_result != -1)
 	{
@@ -68,21 +63,27 @@ static error_t connect_conditions(char **strings, int count, graph_vertice_t *gr
 			if (find_size_of_block(strings + counter, 0, &tmp_result) == ERROR_INCORRECT)
 				return ERROR_INCORRECT;
 			counter += tmp_result;
+			connect_graph_from_to(graph, graph + counter);
 			repeating++;
 		}
 	}
-	is_needle_in_haystack_usual(strings[counter], strlen(strings[counter]), "else ", 5, &tmp_result);
+	is_needle_in_haystack_usual(strings[counter], strlen(strings[counter]), "else ", 5, &tmp_result);//TODO:
 	if (tmp_result != -1)
-		counter += tmp_result + 1;
-	connect_graph_from_to(graph, graph + counter);
+	{
+		counter += tmp_result;
+		if (find_size_of_block(strings + counter, 0, &tmp_result) == ERROR_INCORRECT)
+			return ERROR_INCORRECT;
+		counter += tmp_result;
+		connect_graph_from_to(graph, graph + counter);
+	}
 
 	int substractor = counter - tmp_result - 1;
 	for (int i = 0; i < repeating; i++)
 	{
 		find_size_of_block(strings + substractor, 1, &tmp_result);
+		substractor -= tmp_result;
 		connect_graph_from_to(graph + substractor, graph + counter);
-		substractor -= tmp_result + 1;
-	}
+	}//TODO:Здесь надо соединять концы тел со следующим оператором
 
 	return SUCCESS;
 }
@@ -93,16 +94,18 @@ static error_t connect_cycles(char **strings, int count, graph_vertice_t *graph)
 		return ERROR_INPUT;
 	int tmp_result = 0;
 	//Первый элемент должен указывать на строку с оператором цикла, graph должен указывать на текущую цифру
-	if (find_size_of_block(strings + 1, count - 1, &tmp_result) == ERROR_INCORRECT)
+	if (find_size_of_block(strings, 0, &tmp_result) == ERROR_INCORRECT)
 		return ERROR_INCORRECT;
-	connect_graph_from_to(graph, graph + 1);
-	connect_graph_from_to(graph + 1, graph + 2);
-	connect_graph_from_to(graph + tmp_result, graph);
-	if (tmp_result + 1 < count)
-		connect_graph_from_to(graph + tmp_result, graph + tmp_result + 1);
+	connect_graph_from_to(graph + tmp_result - 1, graph);
+	if (tmp_result < count)
+		connect_graph_from_to(graph + tmp_result - 1, graph + tmp_result);
+	connect_graph_from_to(graph, graph + tmp_result - 1);
 	return SUCCESS;
 }
 
+//Первая строка - условный оператор или оператор цикла
+//Вторая строка - фигурная скобка 1
+//А дальше...
 static error_t find_size_of_block(char **strings, int invert, int *result)
 {
 	if (!strings || !result)
@@ -112,7 +115,6 @@ static error_t find_size_of_block(char **strings, int invert, int *result)
 
 	if (!invert)
 	{
-		is_needle_in_haystack_usual(strings[0], strlen(strings[0]), "{", 1, &tmp_result);
 		closure_count++;
 		for (i = 2; closure_count > 0; i++)
 		{
@@ -127,7 +129,6 @@ static error_t find_size_of_block(char **strings, int invert, int *result)
 	}
 	else
 	{
-		is_needle_in_haystack_usual(strings[0], strlen(strings[0]), "}", 1, &tmp_result);
 		closure_count--;
 		for (i = -2; closure_count < 0; i--)
 		{

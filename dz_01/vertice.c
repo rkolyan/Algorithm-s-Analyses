@@ -47,10 +47,10 @@ error_t initialize_graph(graph_vertice_t **graph, int vertice_count)
 {
 	if (!graph || vertice_count <= 0)
 		return ERROR_INPUT;
-	*graph = malloc(sizeof(graph_vertice_t) * vertice_count);
+	*graph = malloc(sizeof(graph_vertice_t) * (vertice_count + 1));
 	if (!*graph)
 		return ERROR_ALLOCATE;
-	for (int i = 0; i < vertice_count; i++)
+	for (int i = 0; i < vertice_count + 1; i++)
 	{
 		(*graph + i)->number = i;
 		(*graph + i)->vertice_count = 0;

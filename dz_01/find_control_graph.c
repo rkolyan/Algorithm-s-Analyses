@@ -18,21 +18,22 @@ error_t find_control_graph(char **strings, int count, graph_vertice_t *graph)
 		flag_of_cycle = 0;
 		flag_of_condition = 0;
 
+		is_needle_in_haystack_usual(strings[i], strlen(strings[i]), "}", 1, &tmp_result);
+		if (tmp_result >= 0)
+			continue;
 		is_needle_in_haystack_usual(strings[i], strlen(strings[i]), "for ", 4, &tmp_result);
 		if (tmp_result >= 0)
 			flag_of_cycle = 1;
 		is_needle_in_haystack_usual(strings[i], strlen(strings[i]), "while ", 6, &tmp_result);
 		if (tmp_result >= 0)
 			flag_of_cycle = 1;
-		is_needle_in_haystack_usual(strings[i], strlen(strings[i]), "do", 3, &tmp_result);
-		if (tmp_result >= 0)
-			flag_of_cycle = 1;
-		is_needle_in_haystack_usual(strings[i], strlen(strings[i]), "}", 1, &tmp_result);
-		if (tmp_result >= 0)
-			continue;
 		is_needle_in_haystack_usual(strings[i], strlen(strings[i]), "if ", 3, &tmp_result);
 		if (tmp_result >= 0)
-			flag_of_condition = 1;
+		{
+			is_needle_in_haystack_usual(strings[i], strlen(strings[i]), "else if ", 8, &tmp_result);
+			if (tmp_result < 0)
+				flag_of_condition = 1;
+		}
 
 		if (flag_of_cycle)
 			connect_cycles(strings + i, count - i, graph + i);
@@ -51,11 +52,10 @@ static error_t connect_conditions(char **strings, int count, graph_vertice_t *gr
 	int tmp_result = 0;
 	if (find_size_of_block(strings, 0, &tmp_result) == ERROR_INCORRECT)
 		return ERROR_INCORRECT;
-	//connect_graph_from_to(graph, graph + 1);
 	int counter = tmp_result;
 	connect_graph_from_to(graph, graph + counter);
 	int repeating = 0;
-	while (tmp_result != -1)
+	do
 	{
 		is_needle_in_haystack_usual(strings[counter], strlen(strings[counter]), "else if ", 8, &tmp_result);
 		if (tmp_result != -1)
@@ -66,24 +66,26 @@ static error_t connect_conditions(char **strings, int count, graph_vertice_t *gr
 			connect_graph_from_to(graph, graph + counter);
 			repeating++;
 		}
-	}
-	is_needle_in_haystack_usual(strings[counter], strlen(strings[counter]), "else ", 5, &tmp_result);//TODO:
+	} 
+	while (tmp_result != -1);
+
+	is_needle_in_haystack_usual(strings[counter], strlen(strings[counter]), "else", 4, &tmp_result);
 	if (tmp_result != -1)
 	{
-		counter += tmp_result;
 		if (find_size_of_block(strings + counter, 0, &tmp_result) == ERROR_INCORRECT)
 			return ERROR_INCORRECT;
 		counter += tmp_result;
-		connect_graph_from_to(graph, graph + counter);
+		repeating++;
 	}
 
-	int substractor = counter - tmp_result - 1;
+	connect_graph_from_to(graph + counter - 1, graph + counter);
+	int substractor = counter;
 	for (int i = 0; i < repeating; i++)
 	{
 		find_size_of_block(strings + substractor, 1, &tmp_result);
 		substractor -= tmp_result;
-		connect_graph_from_to(graph + substractor, graph + counter);
-	}//TODO:Здесь надо соединять концы тел со следующим оператором
+		connect_graph_from_to(graph + substractor - 1, graph + counter);
+	}
 
 	return SUCCESS;
 }
@@ -96,10 +98,8 @@ static error_t connect_cycles(char **strings, int count, graph_vertice_t *graph)
 	//Первый элемент должен указывать на строку с оператором цикла, graph должен указывать на текущую цифру
 	if (find_size_of_block(strings, 0, &tmp_result) == ERROR_INCORRECT)
 		return ERROR_INCORRECT;
-	connect_graph_from_to(graph + tmp_result - 1, graph);
-	if (tmp_result < count)
-		connect_graph_from_to(graph + tmp_result - 1, graph + tmp_result);
-	connect_graph_from_to(graph, graph + tmp_result - 1);
+	connect_graph_from_to(graph + tmp_result - 1, graph);//Соединяет закрывающую фигурную скобку и оператор цикла
+	connect_graph_from_to(graph, graph + tmp_result);//Соединяет позицию оператора цикла с позицией после тела цикла
 	return SUCCESS;
 }
 

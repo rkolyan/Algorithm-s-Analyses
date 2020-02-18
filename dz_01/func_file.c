@@ -16,7 +16,7 @@ error_t input_from_file(FILE *file, char ***strings, int *vertice_count)
 	while (fgets(buffer, BUFFER_SIZE, file))
 		(*vertice_count)++;
 
-	*strings = malloc(sizeof(char *) * (*vertice_count));
+	*strings = malloc(sizeof(char *) * (*vertice_count + 1));
 	if (!*strings)
 	{
 		free(buffer);
@@ -30,6 +30,7 @@ error_t input_from_file(FILE *file, char ***strings, int *vertice_count)
 		buffer[strlen(buffer) - 1] = '\0';
 		(*strings)[i] = strdup(buffer);
 	}
+	(*strings)[*vertice_count] = strdup("OUT");
 	free(buffer);
 
 	return SUCCESS;

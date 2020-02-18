@@ -3,8 +3,10 @@
 #include <unistd.h>
 
 #include "error_codes.h"
-#include "find_control_graph.h"
 #include "func_file.h"
+#include "func_string.h"
+
+#include "find_control_graph.h"
 //#include "find_operations_history.h"
 //#include "find_informational_graph.h"
 //#include "find_informational_history.h"
@@ -18,6 +20,11 @@ int main(int argument_count, char **arguments)
 		puts("./app.exe <FILE_WITH_CODE>");
 		return SUCCESS;
 	}
+
+	graph_vertice_t *graph = NULL;
+	int vertice_count = 0;
+	char **strings = NULL;
+
 	FILE *file = NULL;
 	file = fopen(arguments[1], "r");
 	if (!file)
@@ -25,13 +32,9 @@ int main(int argument_count, char **arguments)
 		printf("Файла с именем %s не существует!\n", arguments[1]);
 		return SUCCESS;
 	}
-
-	graph_vertice_t *graph = NULL;
-	int vertice_count = 0;
-	char **strings = NULL;
-
-	//TODO:Построить граф управления и записать результат в файл result1.dot
 	input_from_file(file, &strings, &vertice_count);
+	fclose(file);
+
 	initialize_graph(&graph, vertice_count);
 	find_control_graph(strings, vertice_count, graph);
 	create_dot_file("result1.dot", graph, vertice_count);
@@ -75,6 +78,6 @@ int main(int argument_count, char **arguments)
 	}
 	*/
 	//TODO:Delete all strings
-	fclose(file);
+	free_strings(&strings, vertice_count);
 	return SUCCESS;
 }

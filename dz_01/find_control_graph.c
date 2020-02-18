@@ -39,8 +39,7 @@ error_t find_control_graph(char **strings, int count, graph_vertice_t *graph)
 			connect_cycles(strings + i, count - i, graph + i);
 		else if (flag_of_condition)
 			connect_conditions(strings + i, count - i, graph + i);
-		if (i < count - 1)
-			connect_graph_from_to(graph + i, graph + i + 1);
+		connect_graph_from_to(graph + i, graph + i + 1);//count + 1 вершин
 	}
 	return SUCCESS;
 }
@@ -55,6 +54,12 @@ static error_t connect_conditions(char **strings, int count, graph_vertice_t *gr
 	int counter = tmp_result;
 	connect_graph_from_to(graph, graph + counter);
 	int repeating = 0;
+	if (counter == count)
+	{
+		connect_graph_from_to(graph + counter - 1, graph + counter);
+		return SUCCESS;
+	}
+
 	do
 	{
 		is_needle_in_haystack_usual(strings[counter], strlen(strings[counter]), "else if ", 8, &tmp_result);

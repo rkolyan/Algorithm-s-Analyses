@@ -11,10 +11,16 @@ error_t create_dot_file(const char *filename, graph_vertice_t *graph, int count)
 	FILE *file = fopen(filename, "w");
 	fputs("digraph\n", file);
 	fputs("{\n", file);
+	fputs("IN -> 1\n", file);
 	for (int i = 0; i < count; i++)
 	{
 		for (int j = 0; j < graph[i].vertice_count; j++)
-			fprintf(file, "%d -> %d\n", i + 1, graph[i].next[j] + 1);
+		{
+			if (graph[i].next[j] == count)
+				fprintf(file, "%d -> OUT\n", i + 1);
+			else
+				fprintf(file, "%d -> %d\n", i + 1, graph[i].next[j] + 1);
+		}
 	}
 	fputs("}", file);
 	fclose(file);

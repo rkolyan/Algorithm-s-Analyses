@@ -106,7 +106,8 @@ error_t delete_dictionary(dictionary_t **dictionary, int count)
 		}
 		free(dictionary[i]);
 	}
-	free(dictionary);
+	if (count)
+		free(dictionary);
 	return SUCCESS;
 }
 

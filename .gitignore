@@ -10,3 +10,5 @@
 *.log
 *.gz
 *TODO
+*.dot
+*.svg

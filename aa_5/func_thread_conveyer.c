@@ -13,7 +13,7 @@ error_t begin_first_conveyer(void *function_resource)
 	{
 		remove_from_queue(fr->previous_queue, &automobile);
 
-		fr->func(automobile);
+		fr->func(automobile);//Call function
 
 		mtx_lock(fr->current_mutex);
 		add_to_queue(fr->current_queue, automobile);
@@ -39,7 +39,7 @@ error_t begin_conveyer(void *function_resource)
 		remove_from_queue(fr->previous_queue, &automobile);
 		mtx_unlock(fr->previous_mutex);
 
-		fr->func(automobile);
+		fr->func(automobile);//Call function
 
 		mtx_lock(fr->current_mutex);
 		add_to_queue(fr->current_queue, automobile);
@@ -65,7 +65,7 @@ error_t begin_last_conveyer(void *function_resource)
 		remove_from_queue(fr->previous_queue, &automobile);
 		mtx_unlock(fr->previous_mutex);
 
-		fr->func(automobile);
+		fr->func(automobile);//Call function
 
 		add_to_queue(fr->current_queue, automobile);
 		automobile = NULL;

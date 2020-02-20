@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "func_conveyer.h"
 #include "func_thread_conveyer.h"
@@ -53,6 +54,7 @@ int main(void)
 	free_memory_resources_array(all_resources, THREADS_COUNT + 1);
 	free(function_resources);
 	free(threads);
+	puts("Сгенерированные данные сохранены в файл result.txt");
 	return 0;
 }
 
